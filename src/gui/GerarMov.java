@@ -55,6 +55,12 @@ public class GerarMov extends javax.swing.JFrame {
 
         jLabel1.setText("Tipo");
 
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
         jLabel2.setText("ID do Produto");
 
         jLabel3.setText("Quantidade");
@@ -143,6 +149,8 @@ public class GerarMov extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        int idProd = 0; 
+        int quantidae = 0;
         
         if (jTextField1.getText().isBlank() || jTextField2.getText().isBlank() ||
             jTextField3.getText().isBlank() || jTextField4.getText().isBlank()) {
@@ -150,11 +158,19 @@ public class GerarMov extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios");
             
         } else {
+            
+            try {
+                idProd = Integer.parseInt(jTextField2.getText());
+                quantidae = Integer.parseInt(jTextField3.getText());
+            } catch (NumberFormatException a){
+                
+            }
+            
             Movimentacao m = new Movimentacao();
             
             m.setTipo(jTextField1.getText());
-            m.setIdProduto(Integer.parseInt(jTextField2.getText()));
-            m.setQuantidade(Integer.parseInt(jTextField3.getText()));
+            m.setIdProduto(idProd);
+            m.setQuantidade(quantidae);
             m.setUsuarioResponsavel(jTextField4.getText());
             
             MovimentacaoDAO dao = new MovimentacaoDAO();
@@ -187,6 +203,10 @@ public class GerarMov extends javax.swing.JFrame {
         
         jTextField1.requestFocus();
     }//GEN-LAST:event_limparActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
 
     /**
      * @param args the command line arguments
