@@ -5,11 +5,13 @@
 package dao;
 
 import factory.ConnectionFactory;
+import factory.PasswordHasher;
 import modelo.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.Base64;
 /**
  *
  * @author cacom
@@ -20,6 +22,35 @@ public class AdminDAO {
     public AdminDAO() {
         this.con = new ConnectionFactory().getConnection();
     }
+    
+    public boolean fazerLogin(String email, String senha) throws Exception{
+        String sql = "SELECT * FROM usuario WHERE email = ?";  
+
+        String senhadb;
+        String salt;
+        byte[] saltdb;
+        
+        try{
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            stmt.setString(1, email);
+            
+            if(rs.next()){
+                senhadb = rs.getString("senha");
+                salt = rs.getString("salt");
+                saltdb = Base64.getDecoder().decode(salt);
+                String senhaHashed = PasswordHasher.hashSenha(senha, saltdb);
+                return PasswordHasher.verificarSenha(senhaHashed, senhadb, saltdb);               
+            }
+            
+            
+        } catch (SQLException e) {
+            throw new Exception(e);
+        }
+        return false;
+    }
+    
     
     public void cadastroUser (Usuario user) throws Exception {
         String sql = "INSERT INTO usuario VALUES (?, ?, ?, ?)";
