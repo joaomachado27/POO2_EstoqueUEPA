@@ -24,7 +24,7 @@ public class MovimentacaoDAO {
     
     public void cadastroMov (Movimentacao m) throws Exception {
         
-        String sql = "INSERT INTO movimentacao (tipo, idProduto, dia, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";  
+        String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";  
 
         PreparedStatement stmt = con.prepareStatement(sql);
         

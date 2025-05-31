@@ -22,7 +22,7 @@ public class AdminDAO {
     }
     
     public void cadastroUser (Usuario user) throws Exception {
-        String sql = "INSERT INTO usuario VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario VALUES (?, ?, ?, ?,?)";
         
         PreparedStatement stmt = con.prepareStatement(sql);
         
@@ -31,6 +31,10 @@ public class AdminDAO {
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getSenha());
             stmt.setBoolean(4, user.getStatus());
+            stmt.setBoolean(5, user.getIsAdmin());
+            
+            stmt.execute();
+            stmt.close();
         } catch (SQLException e) {
             throw new Exception(e);
         }
