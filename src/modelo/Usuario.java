@@ -11,6 +11,7 @@ package modelo;
 public class Usuario {
     String email;
     String senha;
+    String salt;
     String nome;
     boolean status;
     boolean isAdmin;
@@ -53,5 +54,13 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

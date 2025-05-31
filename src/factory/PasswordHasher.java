@@ -15,8 +15,7 @@ import java.util.Base64; // Para codificar/decodificar o salt e o hash para arma
 
 public class PasswordHasher {
 
-    // Geração de Salt
-    public static byte[] generateSalt() {
+    public static byte[] gerarSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16]; // Um salt de 16 bytes é geralmente suficiente
         random.nextBytes(salt);
@@ -24,7 +23,7 @@ public class PasswordHasher {
     }
 
     // Fazer o Hash da Senha com Salt
-    public static String hashPassword(String password, byte[] salt) {
+    public static String hashSenha(String password, byte[] salt) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(salt); // Adiciona o salt antes da senha
@@ -38,8 +37,8 @@ public class PasswordHasher {
     }
 
     // Verificação da Senha
-    public static boolean verifyPassword(String enteredPassword, String storedHashedPassword, byte[] storedSalt) {
-        String enteredHashedPassword = hashPassword(enteredPassword, storedSalt);
-        return enteredHashedPassword.equals(storedHashedPassword);
+    public static boolean verificarSenha(String senha, String senhadb, byte[] saltdb) {
+        String enteredHashedPassword = hashSenha(senha, saltdb);
+        return enteredHashedPassword.equals(senhadb);
     }
 }
