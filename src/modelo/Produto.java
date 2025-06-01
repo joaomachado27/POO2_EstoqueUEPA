@@ -14,14 +14,14 @@ public class Produto {
     String descricao;
     String proceder;
     int quantidade;
-    boolean status;
+    String ativo;
 
-    public boolean getStatus() {
-        return status;
+    public String getAtivo() {
+        return ativo;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setAtivo(String ativo) {
+        this.ativo = ativo;
     }
 
     public int getIdProduto() {

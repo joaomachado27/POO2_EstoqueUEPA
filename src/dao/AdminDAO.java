@@ -18,6 +18,7 @@ import java.util.Base64;
  */
 public class AdminDAO {
     Connection con;
+    public String status;
 
     public AdminDAO() {
         this.con = new ConnectionFactory().getConnection();
@@ -61,8 +62,8 @@ public class AdminDAO {
             stmt.setString(1, user.getNome());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getSenha());
-            stmt.setBoolean(4, user.getStatus());
-            stmt.setBoolean(5, user.getIsAdmin());
+            stmt.setString(4, user.getAtivo());
+            stmt.setString(5, user.getIsAdmin());
             
             stmt.execute();
             stmt.close();
@@ -88,8 +89,8 @@ public class AdminDAO {
             if (rs.next()) {
                 u.setNome(rs.getString("nome"));
                 u.setSenha(rs.getString("senha"));
-                u.setStatus(rs.getBoolean("status"));
-                u.setIsAdmin(rs.getBoolean("isAdmin"));
+                u.setAtivo(rs.getString("ativo"));
+                u.setIsAdmin(rs.getString("isAdmin"));
             }
         } catch (SQLException e) {
             throw new Exception(e);
@@ -99,7 +100,7 @@ public class AdminDAO {
     
     public void alterUser(Usuario u) throws Exception{
         
-        String sql = "UPDATE usuario set nome = ?, senha = ?, status = ?,isAdmin = ? where email = ?";
+        String sql = "UPDATE usuario set nome = ?, senha = ?, ativo = ?,isAdmin = ? where email = ?";
         
         
         
@@ -110,8 +111,8 @@ public class AdminDAO {
             
             stmt.setString(1, u.getNome());
             stmt.setString(2, u.getSenha());
-            stmt.setBoolean(3, u.getStatus());
-            stmt.setBoolean(4, u.getIsAdmin());
+            stmt.setString(3, u.getAtivo());
+            stmt.setString(4, u.getIsAdmin());
             
             stmt.execute();
             stmt.close();

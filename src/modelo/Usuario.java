@@ -13,25 +13,25 @@ public class Usuario {
     String senha;
     String salt;
     String nome;
-    boolean status;
-    boolean isAdmin;
+    String isAdmin;
+    String ativo;
 
-    public boolean getIsAdmin() {
+    public String getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
+    public void setIsAdmin(String isAdmin) {
         this.isAdmin = isAdmin;
     }
 
-    public boolean getStatus() {
-        return status;
+    public String getAtivo() {
+        return ativo;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setAtivo(String ativo) {
+        this.ativo = ativo;
     }
-
+    
     public String getEmail() {
         return email;
     }
