@@ -6,7 +6,7 @@ package gui;
 
 import gui.cadastros.CadastroProduto;
 import gui.cadastros.CadastroUsuario;
-import gui.consultas.ConsulProduto;
+import gui.consultas.ConsultaProduto;
 
 /**
  *
@@ -144,7 +144,7 @@ public class gerencia extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        ConsulProduto c = new ConsulProduto();
+        ConsultaProduto c = new ConsultaProduto();
         c.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed

@@ -1,36 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author cacom
- */
 public class Usuario {
     String email;
     String senha;
     String salt;
     String nome;
     String isAdmin;
-    String ativo;
-
-    public String getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(String isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    public String getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(String ativo) {
-        this.ativo = ativo;
-    }
     
     public String getEmail() {
         return email;
@@ -47,6 +22,14 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
     public String getNome() {
         return nome;
@@ -55,12 +38,12 @@ public class Usuario {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    public String getSalt() {
-        return salt;
+
+    public String getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

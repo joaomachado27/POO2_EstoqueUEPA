@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import factory.ConnectionFactory;
@@ -10,101 +6,133 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author cacom
- */
 public class ProdutoDAO {
-    Connection con;
+
+    private Connection conn;
 
     public ProdutoDAO() {
-        this.con = new ConnectionFactory().getConnection();
+        this.conn = new ConnectionFactory().getConnection();
     }
-    
-    public void cadastroProd(Produto p) throws Exception{
-        
-        String sql = "INSERT INTO produtos (nome, descricao, procedencia, quantidade, ativo) VALUES (?, ?, ?, ?, ?)";
-        
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        try{
-            stmt.setString(1, p.getNome());
-            stmt.setString(2, p.getDescricao());
-            stmt.setString(3, p.getProceder());
-            stmt.setInt(4, p.getQuantidade());
-            stmt.setString(5, p.getAtivo());
-            
-            stmt.execute();
-            stmt.close();
+
+    public void inserir(Produto produto) {
+
+        String sql = "INSERT INTO produtos (nome, descricao, procedencia, quantidade) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, produto.getNome());
+            ps.setString(2, produto.getDescricao());
+            ps.setString(3, produto.getProcedencia());
+            ps.setInt(4, produto.getQuantidade());
+
+            ps.execute();
+            ps.close();
         } catch (SQLException e) {
-            throw new Exception (e);
+            JOptionPane.showMessageDialog(null, "Erro ao inserir produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }
-    
-    public Produto consultProd (String IDouNOME) throws Exception{
-        
-        Produto p = new Produto();
-        
-        PreparedStatement stmt;
-        
-        try {
-            try {
-                String sql = "SELECT * from produtos where idProdutos = ?";
-        
-                stmt = con.prepareStatement(sql);
-                stmt.setInt(1, Integer.parseInt(IDouNOME));
-                
-            } catch (NumberFormatException e) {
-                
-                String sql = "SELECT * from produtos where nome LIKE ?";
-                stmt = con.prepareStatement(sql);
-                
-                stmt.setString(1, IDouNOME);
-                
+
+    public void atualizar(Produto produto) {
+
+        String sql = "UPDATE produtos SET nome = ?, descricao = ?, procedencia = ? WHERE idproduto = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, produto.getNome());
+            ps.setString(2, produto.getDescricao());
+            ps.setString(3, produto.getProcedencia());
+            ps.setInt(4, produto.getIdProduto());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void remover(Produto produto) {
+        String sql = "UPDATE produtos SET ativo = 'N' WHERE idproduto=?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, produto.getIdProduto());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao remover produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public Produto consultarID(int id) {
+        String sql = "SELECT * FROM produtos WHERE idproduto = ? AND ativo='S'";
+        Produto produto = new Produto();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    produto.setIdProduto(rs.getInt("idproduto"));
+                    produto.setNome(rs.getString("nome"));
+                    produto.setDescricao(rs.getString("descricao"));
+                    produto.setProcedencia(rs.getString("procedencia"));
+                    produto.setQuantidade(rs.getInt("quantidade"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Produto com o ID informado não existe \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
-            
-            ResultSet rs  = stmt.executeQuery();
-            
-            if (rs.next()) {
-                p.setIdProduto(rs.getInt("idProdutos"));
-                 p.setNome(rs.getString("nome"));
-                 p.setDescricao(rs.getString("descricao"));
-                 p.setProceder(rs.getString("procedencia"));
-                 p.setQuantidade(rs.getInt("quantidade"));
-                 p.setAtivo(rs.getString("ativo"));
-                
-            }
-            
         } catch (SQLException e) {
-            throw new Exception(e);
+            JOptionPane.showMessageDialog(null, "Erro ao buscar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        
-        return p;
+
+        return produto;
     }
-    
-    public void updateProdu (Produto p) throws Exception{
-        
-        String sql = "UPDATE produtos set nome = ?, descricao = ?, procedencia = ?, quantidade = ?, ativo = ? where idProdutos = ?";
-        
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        try {
-            
-            stmt.setInt(6, p.getIdProduto());
-            
-            stmt.setString(1, p.getNome());
-            stmt.setString(2, p.getDescricao());
-            stmt.setString(3, p.getProceder());
-            stmt.setInt(4, p.getQuantidade());
-            stmt.setString(5, p.getAtivo());
-            
-            stmt.execute();
-            stmt.close();
+
+    public Produto consultarNome(String nome) {
+        String sql = "SELECT * FROM produtos WHERE nome = ? AND ativo='S'";
+        Produto produto = new Produto();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nome);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    produto.setIdProduto(rs.getInt("idproduto"));
+                    produto.setNome(rs.getString("nome"));
+                    produto.setDescricao(rs.getString("descricao"));
+                    produto.setProcedencia(rs.getString("procedencia"));
+                    produto.setQuantidade(rs.getInt("quantidade"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Produto com o Nome informado não existe \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         } catch (SQLException e) {
-            throw new Exception(e);
+            JOptionPane.showMessageDialog(null, "Erro ao buscar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
+        return produto;
+    }
+
+    public List<Produto> listar() {
+        String sql = "SELECT * FROM produtos WHERE ativo='S'";
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Produto produto = new Produto();
+                produto.setIdProduto(rs.getInt("idproduto"));
+                produto.setNome(rs.getString("nome"));
+                produto.setDescricao(rs.getString("descricao"));
+                produto.setProcedencia(rs.getString("procedencia"));
+                produto.setQuantidade(rs.getInt("quantidade"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar produto: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return produtos;
     }
 }
