@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import factory.ConnectionFactory;
@@ -12,10 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.Base64;
-/**
- *
- * @author cacom
- */
+
+
 public class AdminDAO {
     Connection con;
     public String status;
@@ -54,7 +48,7 @@ public class AdminDAO {
     
     
     public void cadastroUser (Usuario user) throws Exception {
-        String sql = "INSERT INTO usuario VALUES (?, ?, ?, ?,?)";
+        String sql = "INSERT INTO usuario VALUES (?, ?, ?,?)";
         
         PreparedStatement stmt = con.prepareStatement(sql);
         
@@ -62,8 +56,7 @@ public class AdminDAO {
             stmt.setString(1, user.getNome());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getSenha());
-            stmt.setString(4, user.getAtivo());
-            stmt.setString(5, user.getIsAdmin());
+            stmt.setString(4, user.getIsAdmin());
             
             stmt.execute();
             stmt.close();
@@ -89,7 +82,6 @@ public class AdminDAO {
             if (rs.next()) {
                 u.setNome(rs.getString("nome"));
                 u.setSenha(rs.getString("senha"));
-                u.setAtivo(rs.getString("ativo"));
                 u.setIsAdmin(rs.getString("isAdmin"));
             }
         } catch (SQLException e) {
@@ -100,7 +92,7 @@ public class AdminDAO {
     
     public void alterUser(Usuario u) throws Exception{
         
-        String sql = "UPDATE usuario set nome = ?, senha = ?, ativo = ?,isAdmin = ? where email = ?";
+        String sql = "UPDATE usuario set nome = ?, senha = ?,isAdmin = ? where email = ?";
         
         
         
@@ -111,8 +103,7 @@ public class AdminDAO {
             
             stmt.setString(1, u.getNome());
             stmt.setString(2, u.getSenha());
-            stmt.setString(3, u.getAtivo());
-            stmt.setString(4, u.getIsAdmin());
+            stmt.setString(3, u.getIsAdmin());
             
             stmt.execute();
             stmt.close();

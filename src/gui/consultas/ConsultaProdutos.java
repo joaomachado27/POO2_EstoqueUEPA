@@ -40,7 +40,8 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         tabelaProdutos = new javax.swing.JTable();
         comboTipo = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Produtos Cadastrados");
@@ -80,7 +81,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nome", "Descrição", "Procedencia", "Estoque"
+                "Código", "Nome", "Descrição", "Procedencia", "Estoque"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -103,7 +104,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
             tabelaProdutos.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "ID", "Nome" }));
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Código", "Nome" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,6 +153,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     public void LoadProdutos() {
