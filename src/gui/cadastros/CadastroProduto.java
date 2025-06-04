@@ -188,7 +188,7 @@ public class CadastroProduto extends javax.swing.JFrame {
             } else {
                 if ((fieldNome.getText().isEmpty()) || (fieldDescricao.getText().isEmpty())
                  || (fieldProcedencia.getText().isEmpty()) || (fieldQtde.getText().isEmpty())) {
-                    JOptionPane.showMessageDialog(null, "os campos não podem ser vazios");
+                    JOptionPane.showMessageDialog(null, "Os campos não podem ser vazios");
                     return;
                 }
 

@@ -164,7 +164,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             MovimentacaoDAO dao = new MovimentacaoDAO();
             
             try {
-                dao.cadastroMov(m);
+                dao.inserir(m);
                 JOptionPane.showMessageDialog(rootPane, "nice");
                 limparActionPerformed(evt);
             } catch (Exception ex) {

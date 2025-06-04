@@ -6,58 +6,57 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 public class MovimentacaoDAO {
-    Connection con;
+
+    private Connection conn;
 
     public MovimentacaoDAO() {
-        this.con = new ConnectionFactory().getConnection();
+        this.conn = new ConnectionFactory().getConnection();
     }
-    
-    public void cadastroMov (Movimentacao m) throws Exception {
-        
-        String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";  
 
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        try {
-            
-            stmt.setString(1, m.getTipo());
-            stmt.setInt(2, m.getIdProduto());
-            stmt.setInt(3, m.getQuantidade());
-            stmt.setString(4, m.getUsuarioResponsavel());
-            
-            stmt.execute();
-            stmt.close();
+    public void inserir(Movimentacao movimentacao) {
+
+        String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, movimentacao.getTipo());
+            ps.setInt(2, movimentacao.getIdProduto());
+            ps.setInt(3, movimentacao.getQuantidade());
+            ps.setString(4, movimentacao.getUsuarioResponsavel());
+
+            ps.execute();
+            ps.close();
+
         } catch (SQLException e) {
-            throw new Exception(e);
+            JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    public Movimentacao consultMov() throws Exception{
-        Movimentacao m = new Movimentacao();
-        
+
+    public Movimentacao consultar() {
         String sql = "SELECT * from movimentacao";
-        //buscar pelo que?
-        try {
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        ResultSet rs = stmt.executeQuery();
-        
-        if (rs.next()) {
-            m.setIdMov(rs.getInt("idMov"));
-            m.setTipo(rs.getString("tipo"));
-            m.setIdProduto(rs.getInt("idProduto"));
-            m.setData(String.valueOf(rs.getDate("data")));
-            m.setHora(String.valueOf(rs.getTime("hora")));
-            m.setQuantidade(rs.getInt("quantidade"));
-            m.setUsuarioResponsavel(rs.getString("usuario"));
-        }
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-        return m;
-    }
-    
-}
+        Movimentacao movimentacao = new Movimentacao();
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    movimentacao.setIdMov(rs.getInt("idMov"));
+                    movimentacao.setTipo(rs.getString("tipo"));
+                    movimentacao.setIdProduto(rs.getInt("idProduto"));
+                    movimentacao.setData(rs.getDate("data").toString());
+                    movimentacao.setHora(rs.getTime("hora").toString());
+                    movimentacao.setQuantidade(rs.getInt("quantidade"));
+                    movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
+                }
+            } catch (Exception e) {
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao consultar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        return movimentacao;
+    }
+
+}
