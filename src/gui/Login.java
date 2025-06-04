@@ -142,7 +142,6 @@ public class Login extends javax.swing.JFrame {
             String senha = fieldSenha.getText();
             
             AdminDAO dao = new AdminDAO();
-            
             try {
                 if (dao.fazerLogin(email, senha)){
                     JOptionPane.showMessageDialog(rootPane, "Login feito com sucesso!");
