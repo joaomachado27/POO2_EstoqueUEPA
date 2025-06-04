@@ -27,16 +27,15 @@ public class AdminDAO {
         
         try{
             PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             
-            stmt.setString(1, email);
             
             if(rs.next()){
                 senhadb = rs.getString("senha");
                 salt = rs.getString("salt");
                 saltdb = Base64.getDecoder().decode(salt);
-                String senhaHashed = PasswordHasher.hashSenha(senha, saltdb);
-                return PasswordHasher.verificarSenha(senhaHashed, senhadb, saltdb);               
+                return PasswordHasher.verificarSenha(senha, senhadb, saltdb);               
             }
             
             
@@ -47,21 +46,27 @@ public class AdminDAO {
     }
     
     
-    public void cadastroUser (Usuario user) throws Exception {
-        String sql = "INSERT INTO usuario VALUES (?, ?, ?,?)";
+    public void cadastrarUsuario (Usuario usuario) throws Exception {
+        String sql = "INSERT INTO usuario (nome, email, senha, salt, isAdmin) VALUES (?, ?, ?, ?, ?)";
         
         PreparedStatement stmt = con.prepareStatement(sql);
         
         try {
-            stmt.setString(1, user.getNome());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getSenha());
-            stmt.setString(4, user.getIsAdmin());
+            byte[] salt = PasswordHasher.gerarSalt();
+            String senhaHashed = PasswordHasher.hashSenha(usuario.getSenha(), salt);
+            String saltstring = Base64.getEncoder().encodeToString(salt);
+            
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, senhaHashed);
+            stmt.setString(4, saltstring);
+            stmt.setString(5, usuario.getIsAdmin());
             
             stmt.execute();
             stmt.close();
+            
         } catch (SQLException e) {
-            throw new Exception(e);
+            throw new Exception("Erro ao cadastrar o usuário\n\n" + e);
         }
     }
     
