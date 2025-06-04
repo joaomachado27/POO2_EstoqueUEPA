@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import factory.ConnectionFactory;
@@ -11,10 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-/**
- *
- * @author cacom
- */
 public class MovimentacaoDAO {
     Connection con;
 
@@ -24,7 +16,7 @@ public class MovimentacaoDAO {
     
     public void cadastroMov (Movimentacao m) throws Exception {
         
-        String sql = "INSERT INTO movimentacao (tipo, idProduto, dia, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";  
+        String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";  
 
         PreparedStatement stmt = con.prepareStatement(sql);
         
