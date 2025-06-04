@@ -1,6 +1,7 @@
 package gui;
 
 import dao.AdminDAO;
+import gui.cadastros.CadastroUsuario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -135,7 +136,7 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
        /* if (fieldEmail.getText().isEmpty() || fieldSenha.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios!");    
-        } else if(!fieldSenha.getText().endsWith("@uepa.br")){
+        } else if(!fieldEmail.getText().endsWith("@uepa.br")){
             JOptionPane.showMessageDialog(rootPane, "Você deve utilizar um e-mail institucional!");
         } else {
             String email = fieldEmail.getText();
