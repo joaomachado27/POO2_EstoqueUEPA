@@ -12,11 +12,11 @@ public class MovimentacaoDAO {
 
     private Connection conn;
 
-    public MovimentacaoDAO() {
+    public MovimentacaoDAO()  {
         this.conn = new ConnectionFactory().getConnection();
     }
 
-    public void inserir(Movimentacao movimentacao) {
+    public void inserir(Movimentacao movimentacao) throws Exception {
 
         String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";
 
@@ -30,8 +30,9 @@ public class MovimentacaoDAO {
             ps.close();
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            throw new Exception(e);
         }
+        
     }
 
     public Movimentacao consultar() {
@@ -58,5 +59,24 @@ public class MovimentacaoDAO {
         }
         return movimentacao;
     }
-
+    /*
+    
+    --TRIGGERS 
+    
+    --Trigger para alterar o estoque de produtos 
+        CREATE DEFINER=`root`@`localhost` TRIGGER `TG_addEstoque` AFTER INSERT ON `movimentacao` FOR EACH ROW BEGIN
+if new.tipo = 'ENTRADA' then
+	update produtos p set p.quantidade = p.quantidade + new.quantidade where new.idProduto = p.idProdutos;
+else 
+	update produtos p set p.quantidade = p.quantidade - new.quantidade where new.idProduto = p.idProdutos;
+END if;
+end
+    
+    --Trigger para impedir que quantidade produto fique negativo
+    CREATE DEFINER=`root`@`localhost` TRIGGER `TG_semestoque` BEFORE INSERT ON `movimentacao` FOR EACH ROW BEGIN
+	if ((SELECT quantidade from produtos as p where p.idProdutos = new.idProduto) < new.quantidade) and (new.tipo = 'SAIDA')then
+    SIGNAL SQLSTATE '45000';
+	end IF;
+END
+    */
 }

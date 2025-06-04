@@ -133,7 +133,7 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (fieldEmail.getText().isEmpty() || fieldSenha.getText().isEmpty()) {
+       /* if (fieldEmail.getText().isEmpty() || fieldSenha.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios!");    
         } else if(!fieldSenha.getText().endsWith("@uepa.br")){
             JOptionPane.showMessageDialog(rootPane, "Você deve utilizar um e-mail institucional!");
@@ -158,7 +158,11 @@ public class Login extends javax.swing.JFrame {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(rootPane, "Erro no login!");
             }
-        }
+        }*/
+        Navegacao telaNav = new Navegacao();
+                    telaNav.setVisible(true);
+                    
+                    this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

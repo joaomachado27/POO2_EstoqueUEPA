@@ -123,6 +123,8 @@ public class Navegacao extends javax.swing.JFrame {
         // TODO add your handling code here:
         CadastroMovimentacao telaMovimentacao = new CadastroMovimentacao();
         telaMovimentacao.setVisible(true);
+        
+        this.dispose();
     }//GEN-LAST:event_btnEstoqueActionPerformed
 
     private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
