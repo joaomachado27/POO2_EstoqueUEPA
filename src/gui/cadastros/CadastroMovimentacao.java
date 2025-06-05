@@ -205,7 +205,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 limparActionPerformed(evt);
             } catch (Exception ex) {
                 //chora
-                if (ex.toString().contains("FK_USER")) {
+                if (ex.toString().contains("FK_User")) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: \n Usuario ["+m.getUsuarioResponsavel()+"] não existe ","ERRO",JOptionPane.ERROR_MESSAGE);
             } else if (ex.toString().contains("FK_Prod")) {
                 JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: \n Produto ["+m.getIdProduto()+"] não existe ","ERRO",JOptionPane.ERROR_MESSAGE);
@@ -232,6 +232,8 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         jTextField4.setText("");
         //jTextField5.setText("");
         
+        jRadioButton1.setSelected(false);
+        jRadioButton2.setSelected(false);
         jTextField2.requestFocus();
     }//GEN-LAST:event_limparActionPerformed
 
