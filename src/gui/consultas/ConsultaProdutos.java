@@ -182,17 +182,16 @@ public class ConsultaProdutos extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         int tipoSel = comboTipo.getSelectedIndex();
         
-        if (tipoSel == 1) {
-            String id = fieldBusca.getText();
-
-            if (fieldBusca.getText().isEmpty()) {
+        String busca = fieldBusca.getText();
+        if (fieldBusca.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "O campo não pode ser vazio");
                 LoadProdutos();
                 return;
             }
-
+        
+        if (tipoSel == 1) {
             ProdutoDAO dao = new ProdutoDAO();
-            Produto produto = dao.consultarID(Integer.parseInt(id));
+            Produto produto = dao.consultarID(Integer.parseInt(busca));
             
             try {
                 DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();
@@ -204,16 +203,8 @@ public class ConsultaProdutos extends javax.swing.JFrame {
             }
             
         } else if (tipoSel == 2) {
-            String nome = fieldBusca.getText();
-
-            if (fieldBusca.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "O campo não pode ser vazio");
-                LoadProdutos();
-                return;
-            }
-
             ProdutoDAO dao = new ProdutoDAO();
-            Produto produto = dao.consultarNome(nome);
+            Produto produto = dao.consultarNome(busca);
             
             try {
                 DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();

@@ -2,11 +2,16 @@ package gui;
 
 import gui.cadastros.CadastroMovimentacao;
 import gui.consultas.ConsultaProdutos;
+import utils.Sessao;
 
 public class Navegacao extends javax.swing.JFrame {
 
     public Navegacao() {
         initComponents();
+        
+        if (!Sessao.isAdmin()) {
+            this.remove(btnAdmin);
+        }
     }
 
     /**
@@ -110,13 +115,18 @@ public class Navegacao extends javax.swing.JFrame {
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+        Sessao.encerrarSessao();
+        Login login = new Login();
+        login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
         // TODO add your handling code here:
         ConsultaProdutos telaProdutos = new ConsultaProdutos();
         telaProdutos.setVisible(true);
+        
+        this.dispose();
     }//GEN-LAST:event_btnProdutosActionPerformed
 
     private void btnEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstoqueActionPerformed

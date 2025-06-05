@@ -7,115 +7,104 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Base64;
-
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class AdminDAO {
-    Connection con;
-    public String status;
+
+    private Connection conn;
 
     public AdminDAO() {
-        this.con = new ConnectionFactory().getConnection();
+        this.conn = new ConnectionFactory().getConnection();
     }
-    
-    public boolean fazerLogin(String email, String senha) throws Exception{
-        String sql = "SELECT * FROM usuario WHERE email = ?";  
 
-        String senhadb;
-        String salt;
-        byte[] saltdb;
-        
-        try{
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            
-            
-            if(rs.next()){
-                senhadb = rs.getString("senha");
-                salt = rs.getString("salt");
-                saltdb = Base64.getDecoder().decode(salt);
-                return PasswordHasher.verificarSenha(senha, senhadb, saltdb);               
-            }
-            
-            
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-        return false;
-    }
-    
-    
-    public void cadastrarUsuario (Usuario usuario) throws Exception {
+    public void cadastrar(Usuario usuario) {
         String sql = "INSERT INTO usuario (nome, email, senha, salt, isAdmin) VALUES (?, ?, ?, ?, ?)";
-        
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        try {
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);) {
             byte[] salt = PasswordHasher.gerarSalt();
             String senhaHashed = PasswordHasher.hashSenha(usuario.getSenha(), salt);
             String saltstring = Base64.getEncoder().encodeToString(salt);
-            
-            stmt.setString(1, usuario.getNome());
-            stmt.setString(2, usuario.getEmail());
-            stmt.setString(3, senhaHashed);
-            stmt.setString(4, saltstring);
-            stmt.setString(5, usuario.getIsAdmin());
-            
-            stmt.execute();
-            stmt.close();
-            
+
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getEmail());
+            ps.setString(3, senhaHashed);
+            ps.setString(4, saltstring);
+            ps.setString(5, usuario.getIsAdmin());
+
         } catch (SQLException e) {
-            throw new Exception("Erro ao cadastrar o usuário\n\n" + e);
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar usuário: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public void alterar(Usuario usuario) throws Exception {
+        String sql = "UPDATE usuario SET nome = ?, senha = ?, isAdmin = ? WHERE email = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getSenha());
+            ps.setString(3, usuario.getIsAdmin());
+            ps.setString(4, usuario.getEmail());
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do usuário: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public void remover(Usuario usuario) {
+        String sql = "UPDATE usuario SET ativo = 'N' WHERE email=?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, usuario.getEmail());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao desativar usuário: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public Usuario buscar(String email) {
+        String sql = "SELECT * from usuario WHERE email = ? AND ativo = 'S'";
+        Usuario usuario = new Usuario();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setSenha(rs.getString("senha"));
+                    usuario.setIsAdmin(rs.getString("isAdmin"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário informado não existe \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } 
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro!: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return usuario;
+    }
     
-    public Usuario consultUser(String email) throws Exception{
-        
-        Usuario u = new Usuario();
-        
-        String sql = " SELECT * from usuario where email = ?";
-        
-        PreparedStatement stmt = con.prepareStatement(sql);
-        
-        try {
-            
-            stmt.setString(1, email);
-            
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                u.setNome(rs.getString("nome"));
-                u.setSenha(rs.getString("senha"));
-                u.setIsAdmin(rs.getString("isAdmin"));
+        public List<Usuario> listar() {
+        String sql = "SELECT * FROM usuario WHERE ativo='S'";
+        List<Usuario> usuarios = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setIsAdmin(rs.getString("isAdmin"));
             }
-        } catch (SQLException e) {
-            throw new Exception(e);
-        }
-        return u;
-    }
-    
-    public void alterUser(Usuario u) throws Exception{
-        
-        String sql = "UPDATE usuario set nome = ?, senha = ?,isAdmin = ? where email = ?";
-        
-        
-        
-        try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-            
-            stmt.setString(5, u.getEmail());
-            
-            stmt.setString(1, u.getNome());
-            stmt.setString(2, u.getSenha());
-            stmt.setString(3, u.getIsAdmin());
-            
-            stmt.execute();
-            stmt.close();
-            
-        } catch (SQLException e) {
-            throw new Exception(e);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar usuários: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
         
+        return usuarios;
     }
 }

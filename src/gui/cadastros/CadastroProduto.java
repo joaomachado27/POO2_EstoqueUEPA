@@ -49,9 +49,9 @@ public class CadastroProduto extends javax.swing.JFrame {
         fieldDescricao = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         labelQtde = new javax.swing.JLabel();
-        fieldQtde = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         fieldNome = new javax.swing.JTextField();
+        fieldQtde = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -83,35 +83,38 @@ public class CadastroProduto extends javax.swing.JFrame {
 
         labelQtde.setText("Quantidade Inicial:");
 
-        fieldQtde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        fieldQtde.setMinimumSize(new java.awt.Dimension(286, 25));
-
         jLabel2.setText("Nome:");
 
         fieldNome.setMinimumSize(new java.awt.Dimension(286, 25));
+
+        fieldQtde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        fieldQtde.setMinimumSize(new java.awt.Dimension(286, 25));
 
         javax.swing.GroupLayout panelRegistroLayout = new javax.swing.GroupLayout(panelRegistro);
         panelRegistro.setLayout(panelRegistroLayout);
         panelRegistroLayout.setHorizontalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelRegistroLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(labelQtde)
-                    .addComponent(jLabel6)
-                    .addComponent(fieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(fieldProcedencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fieldDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fieldNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRegistroLayout.createSequentialGroup()
                 .addContainerGap(244, Short.MAX_VALUE)
                 .addComponent(btnLimpar)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegistrar)
                 .addGap(22, 22, 22))
+            .addGroup(panelRegistroLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fieldProcedencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fieldDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fieldNome, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelRegistroLayout.createSequentialGroup()
+                        .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addComponent(labelQtde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel2)
+                            .addComponent(fieldQtde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelRegistroLayout.setVerticalGroup(
             panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,7 +135,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                 .addComponent(labelQtde)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addGroup(panelRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar)
                     .addComponent(btnRegistrar))
@@ -168,8 +171,8 @@ public class CadastroProduto extends javax.swing.JFrame {
         try {
             //validacao
             if (editMode) {
-                if ((fieldNome.getText().isEmpty()) || (fieldDescricao.getText().isEmpty())
-                        || (fieldProcedencia.getText().isEmpty())) {
+                if ((fieldNome.getText().isBlank()) || (fieldDescricao.getText().isBlank())
+                        || (fieldProcedencia.getText().isBlank())) {
                     JOptionPane.showMessageDialog(null, "os campos não podem ser vazios");
                     return;
                 }
@@ -186,8 +189,8 @@ public class CadastroProduto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso");
                 
             } else {
-                if ((fieldNome.getText().isEmpty()) || (fieldDescricao.getText().isEmpty())
-                 || (fieldProcedencia.getText().isEmpty()) || (fieldQtde.getText().isEmpty())) {
+                if ((fieldNome.getText().isBlank()) || (fieldDescricao.getText().isBlank())
+                 || (fieldProcedencia.getText().isBlank()) || (fieldQtde.getText().isBlank())) {
                     JOptionPane.showMessageDialog(null, "Os campos não podem ser vazios");
                     return;
                 }
@@ -201,6 +204,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                 
                 dao.inserir(produto);
                 JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso");
+                btnLimparActionPerformed(evt);
             }
 
         } catch (Exception ex) {
