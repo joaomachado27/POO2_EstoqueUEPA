@@ -5,12 +5,20 @@
 package gui.consultas;
 
 import dao.MovimentacaoDAO;
+import dao.ProdutoDAO;
 import gui.Navegacao;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import modelo.Movimentacao;
+import modelo.Produto;
 
 
 /**
@@ -44,6 +52,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         jComboBox2 = new javax.swing.JComboBox<>();
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,6 +133,13 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Movimentações");
 
+        jButton1.setText("Gerar Relatório");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -147,6 +163,8 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
                         .addComponent(btnVoltar)
                         .addGap(42, 42, 42))))
         );
@@ -161,7 +179,8 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVoltar))
+                    .addComponent(btnVoltar)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(36, Short.MAX_VALUE))
@@ -235,6 +254,70 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        ProdutoDAO dao = new ProdutoDAO();
+        List<Produto> ps = dao.listar();
+        
+        JFileChooser seletorArquivo = new JFileChooser();
+        seletorArquivo.setDialogTitle("Salvar arquivo CSV");
+        
+        // Define um filtro para mostrar apenas arquivos .csv
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos CSV (*.csv)", "csv");
+        seletorArquivo.setFileFilter(filtro);
+        
+        // Sugere um nome de arquivo padrão
+        seletorArquivo.setSelectedFile(new File("produtos.csv"));
+
+        // Abre a janela para o usuário escolher o local
+        int userSelection = seletorArquivo.showSaveDialog(null);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File arquivoParaSalvar = seletorArquivo.getSelectedFile();
+            
+            // Garante que o arquivo tenha a extensão .csv
+            String caminhoArquivo = arquivoParaSalvar.getAbsolutePath();
+            if (!caminhoArquivo.toLowerCase().endsWith(".csv")) {
+                arquivoParaSalvar = new File(caminhoArquivo + ".csv");
+            }
+
+            System.out.println("Salvando o arquivo em: " + arquivoParaSalvar.getAbsolutePath());
+
+            // Usa try-with-resources para garantir que o FileWriter feche automaticamente
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoParaSalvar))) {
+                
+                // --- AQUI VOCÊ ESCOLHE OS ATRIBUTOS ---
+                // Escreve o cabeçalho do CSV (os títulos das colunas)
+                writer.append("NOME");
+                writer.append(",");
+                writer.append("PROCEDÊNCIA");
+                writer.append(",");
+                writer.append("QUANTIDADE");
+                writer.append("\n"); // Pula para a próxima linha
+
+                // Itera sobre a lista de produtos
+                for (Produto p : ps) {
+                    // Escreve os dados de cada produto na ordem do cabeçalho
+                    writer.append(p.getNome()); 
+                    writer.append(",");
+                    writer.append(p.getProcedencia());
+                    writer.append(",");
+                    writer.append(  String.valueOf(p.getQuantidade()));
+                    writer.append("\n"); 
+                }
+
+                System.out.println("Arquivo CSV gerado com sucesso!");
+
+            } catch (IOException e) {
+                System.err.println("Ocorreu um erro ao escrever o arquivo CSV: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Operação de salvar cancelada pelo usuário.");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -243,6 +326,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
