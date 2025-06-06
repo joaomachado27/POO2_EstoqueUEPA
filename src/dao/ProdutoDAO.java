@@ -128,6 +128,7 @@ public class ProdutoDAO {
                 produto.setDescricao(rs.getString("descricao"));
                 produto.setProcedencia(rs.getString("procedencia"));
                 produto.setQuantidade(rs.getInt("quantidade"));
+                produtos.add(produto);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao buscar produto: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

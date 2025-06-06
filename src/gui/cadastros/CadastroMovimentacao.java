@@ -74,6 +74,11 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
 
         fieldQtde.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         fieldQtde.setMinimumSize(new java.awt.Dimension(286, 25));
+        fieldQtde.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldQtdeActionPerformed(evt);
+            }
+        });
 
         cbProdutos.setMinimumSize(new java.awt.Dimension(286, 25));
 
@@ -152,13 +157,14 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         for (Produto p : produtos) {
             mapProdutos.put(p.getIdProduto(), p.getNome());
             cbProdutos.addItem(p.getNome());
+            
         }
     }
 
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        if (!jRadioButton1.isSelected() || !jRadioButton2.isSelected()) {
+        if (!(jRadioButton1.isSelected()) && !(jRadioButton2.isSelected())) {
             JOptionPane.showMessageDialog(rootPane, "Por favor escolha um tipo");
             return;
         }
@@ -193,13 +199,12 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
             movimentacao.setUsuarioResponsavel(Sessao.getEmail());
             movimentacao.setIdProduto(idProduto);
-
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.inserir(movimentacao);
 
             JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
             btnLimparActionPerformed(evt);
-
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -210,6 +215,10 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         cbProdutos.setSelectedItem("Selecione");
         fieldQtde.setText("");
     }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void fieldQtdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldQtdeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldQtdeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpar;
