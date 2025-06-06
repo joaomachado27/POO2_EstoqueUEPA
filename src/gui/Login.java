@@ -144,13 +144,13 @@ public class Login extends javax.swing.JFrame {
 
             LoginDAO dao = new LoginDAO();
             try {
-                dao.fazerLogin(email, senha);
-                JOptionPane.showMessageDialog(rootPane, "Login feito com sucesso!");
-
-                Navegacao telaNav = new Navegacao();
-                telaNav.setVisible(true);
-
-                this.dispose();
+                if(dao.fazerLogin(email, senha)){
+                    JOptionPane.showMessageDialog(rootPane, "Login feito com sucesso!");
+                    Navegacao telaNav = new Navegacao();
+                    telaNav.setVisible(true);
+                    this.dispose();
+                }
+              
             } catch (Exception ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Erro no login!" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

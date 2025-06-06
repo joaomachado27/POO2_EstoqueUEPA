@@ -1,6 +1,7 @@
 package gui.cadastros;
 
 import dao.AdminDAO;
+import gui.consultas.ConsultaUsuario;
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 
