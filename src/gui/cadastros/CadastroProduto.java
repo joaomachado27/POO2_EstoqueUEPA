@@ -1,7 +1,6 @@
 package gui.cadastros;
 
 import dao.ProdutoDAO;
-import gui.consultas.ConsultaProdutos;
 import javax.swing.JOptionPane;
 import modelo.Produto;
 
@@ -17,7 +16,7 @@ public class CadastroProduto extends javax.swing.JFrame {
     }
 
     // editar
-    public CadastroProduto(Produto produto, ConsultaProdutos consultaProdutos) {
+    public CadastroProduto(Produto produto) {
         initComponents();
         editMode = true;
         produtoEditando = produto;

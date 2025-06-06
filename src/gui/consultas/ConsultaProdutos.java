@@ -243,7 +243,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         ProdutoDAO dao = new ProdutoDAO();
         Produto produto = dao.consultarID(Integer.parseInt(idTable));
 
-        CadastroProduto tela = new CadastroProduto(produto, this);
+        CadastroProduto tela = new CadastroProduto(produto);
         tela.setVisible(true);
     }//GEN-LAST:event_btnAtualizarActionPerformed
 

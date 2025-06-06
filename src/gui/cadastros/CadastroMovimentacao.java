@@ -193,7 +193,10 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao identificar produto.");
                 return;
             }
-
+            
+            ProdutoDAO produtoDAO = new ProdutoDAO();
+            produtoDAO.consultarID(idProduto);
+            
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
@@ -203,6 +206,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             dao.inserir(movimentacao);
 
             JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
+            
             btnLimparActionPerformed(evt);
             
         } catch (Exception e) {

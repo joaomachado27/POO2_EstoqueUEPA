@@ -128,6 +128,7 @@ public class ProdutoDAO {
                 produto.setDescricao(rs.getString("descricao"));
                 produto.setProcedencia(rs.getString("procedencia"));
                 produto.setQuantidade(rs.getInt("quantidade"));
+                
                 produtos.add(produto);
             }
         } catch (SQLException ex) {
