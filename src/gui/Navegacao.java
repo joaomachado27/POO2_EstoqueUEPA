@@ -2,6 +2,7 @@ package gui;
 
 import gui.cadastros.CadastroMovimentacao;
 import gui.consultas.ConsultaProdutos;
+import gui.consultas.ConsultasMov;
 
 public class Navegacao extends javax.swing.JFrame {
 
@@ -128,6 +129,11 @@ public class Navegacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEstoqueActionPerformed
 
     private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
+        
+        ConsultasMov telaRelatorio = new ConsultasMov();
+        telaRelatorio.setVisible(true);
+        
+        this.dispose();
     }//GEN-LAST:event_btnRelatoriosActionPerformed
 
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
