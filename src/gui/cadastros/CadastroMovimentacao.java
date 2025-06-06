@@ -2,6 +2,7 @@ package gui.cadastros;
 
 import dao.MovimentacaoDAO;
 import dao.ProdutoDAO;
+import gui.Navegacao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         fieldQtde = new javax.swing.JFormattedTextField();
         cbProdutos = new javax.swing.JComboBox<>();
+        btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -82,6 +84,13 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
 
         cbProdutos.setMinimumSize(new java.awt.Dimension(286, 25));
 
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -100,21 +109,26 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButton2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnVoltar)
+                        .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,11 +148,13 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(fieldQtde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar)
                     .addComponent(btnRegistrar))
-                .addGap(40, 40, 40))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnVoltar)
+                .addGap(26, 26, 26))
         );
 
         pack();
@@ -157,7 +173,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         for (Produto p : produtos) {
             mapProdutos.put(p.getIdProduto(), p.getNome());
             cbProdutos.addItem(p.getNome());
-            
+
         }
     }
 
@@ -179,9 +195,9 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
 
         try {
             String tipo = (jRadioButton1.isSelected()) ? "ENTRADA" : "SAIDA";
-            
+
             String produtoSel = (String) cbProdutos.getSelectedItem();
-            
+
             int idProduto = -1;
             for (Map.Entry<Integer, String> entry : mapProdutos.entrySet()) {
                 if (entry.getValue().equals(produtoSel)) {
@@ -193,10 +209,10 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao identificar produto.");
                 return;
             }
-            
+
             ProdutoDAO produtoDAO = new ProdutoDAO();
             produtoDAO.consultarID(idProduto);
-            
+
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
@@ -206,9 +222,9 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             dao.inserir(movimentacao);
 
             JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
-            
+
             btnLimparActionPerformed(evt);
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -224,9 +240,16 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldQtdeActionPerformed
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        Navegacao n = new Navegacao();
+        n.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbProdutos;
     private javax.swing.JFormattedTextField fieldQtde;

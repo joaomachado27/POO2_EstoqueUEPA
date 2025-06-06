@@ -11,12 +11,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Produto;
 
-
 public class MovimentacaoDAO {
 
     private Connection conn;
 
-    public MovimentacaoDAO()  {
+    public MovimentacaoDAO() {
         this.conn = new ConnectionFactory().getConnection();
     }
 
@@ -36,18 +35,19 @@ public class MovimentacaoDAO {
         } catch (SQLException e) {
             throw new Exception(e);
         }
-        
+
     }
-    
-    
+
     @FunctionalInterface
     interface PreparadorStatement {
+
         void preparar(PreparedStatement ps) throws SQLException;
-}
-        public List<Movimentacao> consultarUsuario(String user) {
+    }
+
+    public List<Movimentacao> consultarUsuario(String user) {
         String sql = "SELECT * from movimentacao where usuario LIKE ?";
-        
-        return executarConsulta(sql, ps -> ps.setString(1, user+"%"));
+
+        return executarConsulta(sql, ps -> ps.setString(1, user + "%"));
     }
 
     public List<Movimentacao> consultPod(int prod) {
@@ -63,7 +63,7 @@ public class MovimentacaoDAO {
             JOptionPane.showMessageDialog(null, "Índice de período inválido.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
             return new ArrayList<>();
         }
-    
+
         int dias = escopo.get(variavel);
         return executarConsulta(sql, ps -> ps.setInt(1, dias));
     }
@@ -71,47 +71,44 @@ public class MovimentacaoDAO {
     public List<Movimentacao> executarConsulta(String sql, PreparadorStatement preparador) {
         List<Movimentacao> movs = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        
-        
-        preparador.preparar(ps);
-        
-        
-        try (ResultSet rs = ps.executeQuery()) {
-            
-            movs = listarMovs(rs);
-        }
-        
+
+            preparador.preparar(ps);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                movs = listarMovs(rs);
+            }
+
         } catch (SQLException ex) {
-        
+
             JOptionPane.showMessageDialog(null, "Erro ao executar consulta: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            
+
         }
         return movs;
     }
 
-    
     private List<Movimentacao> listarMovs(ResultSet rs) throws SQLException {
         ProdutoDAO dao = new ProdutoDAO();
         Produto p = new Produto();
         List<Movimentacao> movs = new ArrayList<>();
         int count = 0;
         while (rs.next() && count < 20) {
-          
-        Movimentacao movimentacao = new Movimentacao();
-        movimentacao.setIdMov(rs.getInt("idMov"));
-        movimentacao.setTipo(rs.getString("tipo"));
-        movimentacao.setIdProduto(rs.getInt("idProduto"));
-        movimentacao.setData(rs.getDate("data") != null ? rs.getDate("data").toString() : null);
-        movimentacao.setHora(rs.getTime("hora") != null ? rs.getTime("hora").toString() : null);
-        movimentacao.setQuantidade(rs.getInt("quantidade"));
-        movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
-        movs.add(movimentacao);
-        count++;
+
+            Movimentacao movimentacao = new Movimentacao();
+            movimentacao.setIdMov(rs.getInt("idMov"));
+            movimentacao.setTipo(rs.getString("tipo"));
+            movimentacao.setIdProduto(rs.getInt("idProduto"));
+            movimentacao.setData(rs.getDate("data") != null ? rs.getDate("data").toString() : null);
+            movimentacao.setHora(rs.getTime("hora") != null ? rs.getTime("hora").toString() : null);
+            movimentacao.setQuantidade(rs.getInt("quantidade"));
+            movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
+            movs.add(movimentacao);
+            count++;
         }
         return movs;
-            }
-        }
-    /*
+    }
+}
+/*
     
     --TRIGGERS 
     
@@ -130,5 +127,4 @@ end
     SIGNAL SQLSTATE '45000';
 	end IF;
 END
-    */
-
+ */

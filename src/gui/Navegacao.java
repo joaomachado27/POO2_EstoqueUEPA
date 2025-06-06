@@ -2,7 +2,7 @@ package gui;
 
 import gui.cadastros.CadastroMovimentacao;
 import gui.consultas.ConsultaProdutos;
-import gui.consultas.ConsultasMov;
+import gui.consultas.ConsultaMovimentacao;
 import utils.Sessao;
 
 public class Navegacao extends javax.swing.JFrame {
@@ -140,7 +140,7 @@ public class Navegacao extends javax.swing.JFrame {
 
     private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
         
-        ConsultasMov telaRelatorio = new ConsultasMov();
+        ConsultaMovimentacao telaRelatorio = new ConsultaMovimentacao();
         telaRelatorio.setVisible(true);
         
         this.dispose();

@@ -1,6 +1,7 @@
 package gui.cadastros;
 
 import dao.AdminDAO;
+import gui.consultas.ConsultaUsuario;
 import javax.swing.JOptionPane;
 import modelo.Usuario;
 
@@ -45,6 +46,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
         adminCombo = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         fieldNome = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setResizable(false);
 
@@ -86,6 +88,13 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
         fieldNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
+        jButton1.setText("Voltar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,6 +117,8 @@ public class CadastroUsuario extends javax.swing.JFrame {
                         .addComponent(fieldNome)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jButton1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnLimpar)
                             .addGap(18, 18, 18)
                             .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +150,8 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpar)
-                    .addComponent(btnCadastrar))
+                    .addComponent(btnCadastrar)
+                    .addComponent(jButton1))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
@@ -225,6 +237,12 @@ public class CadastroUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_adminComboActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ConsultaUsuario consultaUsuario = new ConsultaUsuario();
+        consultaUsuario.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> adminCombo;
@@ -233,6 +251,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JTextField fieldEmail;
     private javax.swing.JTextField fieldNome;
     private javax.swing.JTextField fieldSenha;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
