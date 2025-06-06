@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import modelo.Produto;
+
 
 public class MovimentacaoDAO {
 
@@ -37,43 +37,75 @@ public class MovimentacaoDAO {
         }
         
     }
-
-    public void consultarUsuario(String user) {
-        String sql = "SELECT * from movimentacao where usuarioResponsavel = ?";
+    @FunctionalInterface
+    interface PreparadorStatement {
+        void preparar(PreparedStatement ps) throws SQLException;
+}
+        public List<Movimentacao> consultarUsuario(String user) {
+        String sql = "SELECT * from movimentacao where usuario LIKE ?";
         
-        listarMovs(sql);
+        return executarConsulta(sql, ps -> ps.setString(1, user+"%"));
     }
-    
-    public void consultPod(String prod) {
+
+    public List<Movimentacao> consultPod(int prod) {
         String sql = "SELECT * FROM movimentacao where idProduto = ?";
-        
-        listarMovs(sql);
+        return executarConsulta(sql, ps -> ps.setInt(1, prod));
     }
-    
-    public List<Movimentacao> listarMovs(String sql) {
-        Movimentacao movimentacao = new Movimentacao();
-        List<Movimentacao> MOVS = new ArrayList<>();
-        
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    movimentacao.setIdMov(rs.getInt("idMov"));
-                    movimentacao.setTipo(rs.getString("tipo"));
-                    movimentacao.setIdProduto(rs.getInt("idProduto"));
-                    movimentacao.setData(rs.getDate("data").toString());
-                    movimentacao.setHora(rs.getTime("hora").toString());
-                    movimentacao.setQuantidade(rs.getInt("quantidade"));
-                    movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
-                }
-            } catch (Exception e) {
-            }
+    public List<Movimentacao> consultDATA(int variavel) {
+        String sql = "SELECT * from movimentacao where DATEDIFF(NOW(), data) <= ?";
+        List<Integer> escopo = List.of(1, 7, 30, 180, 365);
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao consultar Movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        if (variavel < 0 || variavel >= escopo.size()) {
+            JOptionPane.showMessageDialog(null, "Índice de período inválido.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
+            return new ArrayList<>();
         }
-        return MOVS;
+    
+        int dias = escopo.get(variavel);
+        return executarConsulta(sql, ps -> ps.setInt(1, dias));
     }
+
+    public List<Movimentacao> executarConsulta(String sql, PreparadorStatement preparador) {
+        List<Movimentacao> movs = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        
+        preparador.preparar(ps);
+        
+        
+        try (ResultSet rs = ps.executeQuery()) {
+            
+            movs = listarMovs(rs);
+        }
+        
+        } catch (SQLException ex) {
+        
+            JOptionPane.showMessageDialog(null, "Erro ao executar consulta: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            
+        }
+        return movs;
+    }
+
+    // O método de extração que criamos antes continua o mesmo
+    private List<Movimentacao> listarMovs(ResultSet rs) throws SQLException {
+    // ... lógica para ler o ResultSet e criar a lista de Movimentacao
+        List<Movimentacao> movs = new ArrayList<>();
+        int count = 0;
+        while (rs.next() && count < 20) {
+        Movimentacao movimentacao = new Movimentacao();
+        movimentacao.setIdMov(rs.getInt("idMov"));
+        movimentacao.setTipo(rs.getString("tipo"));
+        movimentacao.setIdProduto(rs.getInt("idProduto"));
+        movimentacao.setData(rs.getDate("data") != null ? rs.getDate("data").toString() : null);
+        movimentacao.setHora(rs.getTime("hora") != null ? rs.getTime("hora").toString() : null);
+        movimentacao.setQuantidade(rs.getInt("quantidade"));
+        movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
+        movs.add(movimentacao);
+        count++;
+        }
+        return movs;
+            }
+        }
     /*
     
     --TRIGGERS 
@@ -94,4 +126,4 @@ end
 	end IF;
 END
     */
-}
+

@@ -38,7 +38,7 @@ public class ProdutoDAO {
 
     public void atualizar(Produto produto) {
 
-        String sql = "UPDATE produtos SET nome = ?, descricao = ?, procedencia = ? WHERE idproduto = ?";
+        String sql = "UPDATE produtos SET nome = ?, descricao = ?, procedencia = ? WHERE idprodutos = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, produto.getNome());
@@ -53,7 +53,7 @@ public class ProdutoDAO {
     }
 
     public void remover(Produto produto) {
-        String sql = "UPDATE produtos SET ativo = 'N' WHERE idproduto=?";
+        String sql = "UPDATE produtos SET ativo = 'N' WHERE idprodutos = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, produto.getIdProduto());
@@ -65,7 +65,7 @@ public class ProdutoDAO {
     }
 
     public Produto consultarID(int id) {
-        String sql = "SELECT * FROM produtos WHERE idproduto = ? AND ativo='S'";
+        String sql = "SELECT * FROM produtos WHERE idprodutos = ? AND ativo='S'";
         Produto produto = new Produto();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -74,7 +74,7 @@ public class ProdutoDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    produto.setIdProduto(rs.getInt("idproduto"));
+                    produto.setIdProduto(rs.getInt("idprodutos"));
                     produto.setNome(rs.getString("nome"));
                     produto.setDescricao(rs.getString("descricao"));
                     produto.setProcedencia(rs.getString("procedencia"));
@@ -100,7 +100,7 @@ public class ProdutoDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    produto.setIdProduto(rs.getInt("idproduto"));
+                    produto.setIdProduto(rs.getInt("idprodutos"));
                     produto.setNome(rs.getString("nome"));
                     produto.setDescricao(rs.getString("descricao"));
                     produto.setProcedencia(rs.getString("procedencia"));
@@ -123,7 +123,7 @@ public class ProdutoDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Produto produto = new Produto();
-                produto.setIdProduto(rs.getInt("idproduto"));
+                produto.setIdProduto(rs.getInt("idProdutos"));
                 produto.setNome(rs.getString("nome"));
                 produto.setDescricao(rs.getString("descricao"));
                 produto.setProcedencia(rs.getString("procedencia"));

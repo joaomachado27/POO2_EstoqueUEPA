@@ -106,6 +106,11 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         }
 
         comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Código", "Nome" }));
+        comboTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -264,6 +269,10 @@ public class ConsultaProdutos extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void comboTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTipoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;

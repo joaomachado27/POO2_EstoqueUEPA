@@ -91,7 +91,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                         .addComponent(btnLimpar)
                         .addGap(18, 18, 18)
                         .addComponent(btnRegistrar)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
