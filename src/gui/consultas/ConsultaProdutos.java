@@ -3,9 +3,13 @@ package gui.consultas;
 import dao.ProdutoDAO;
 import gui.Navegacao;
 import gui.cadastros.CadastroProduto;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import modelo.Produto;
 
 public class ConsultaProdutos extends javax.swing.JFrame {
@@ -41,6 +45,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         tabelaProdutos = new javax.swing.JTable();
         comboTipo = new javax.swing.JComboBox<>();
         btnVoltar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -121,6 +126,13 @@ public class ConsultaProdutos extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Export para CSV");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -145,6 +157,8 @@ public class ConsultaProdutos extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)
+                                .addGap(31, 31, 31)
                                 .addComponent(btnCadastrar)))
                         .addGap(60, 60, 60))
                     .addGroup(layout.createSequentialGroup()
@@ -161,7 +175,8 @@ public class ConsultaProdutos extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(btnCadastrar))
+                    .addComponent(btnCadastrar)
+                    .addComponent(jButton1))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -295,6 +310,33 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+          
+
+    try {
+
+        TableModel model = tabelaProdutos.getModel();
+        FileWriter csv = new FileWriter(new File("C:\\Users\\cacom\\OneDrive\\Documentos\\Export1.csv"));
+
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            csv.write(model.getColumnName(i) + ",");
+        }
+
+        csv.write("\n");
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+                csv.write(model.getValueAt(i, j).toString() + ",");
+            }
+            csv.write("\n");
+        }
+
+        csv.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnBuscar;
@@ -303,6 +345,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
     private javax.swing.JButton btnVoltar;
     private javax.swing.JComboBox<String> comboTipo;
     private javax.swing.JTextField fieldBusca;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
