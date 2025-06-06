@@ -15,7 +15,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
     }
 
     // editar
-    public CadastroUsuario(Usuario usuario, ConsultaUsuario consultaUsuario) {
+    public CadastroUsuario(Usuario usuario) {
         initComponents();
 
         editMode = true;
@@ -23,7 +23,6 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel4.setText("Alterar Usuario");
         fieldNome.setText(usuario.getNome());
         fieldEmail.setText(usuario.getEmail());
-        fieldSenha.setText(usuario.getSenha());
         adminCombo.setSelectedItem(usuario.getIsAdmin());
         btnCadastrar.setText("Atualizar");
     }
@@ -152,8 +151,7 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         // TODO add your handling code here:
-        if (fieldNome.getText().isBlank() || fieldEmail.getText().isBlank()
-                || fieldSenha.getText().isBlank()) {
+        if (fieldNome.getText().isBlank() || fieldEmail.getText().isBlank()) {
             JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios");
             return;
         }
@@ -164,22 +162,39 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
         try {
             if (editMode) {
-                Usuario u = new Usuario();
-                String admin = (adminCombo.getSelectedItem().equals("S")) ? "S" : "N";
-                
-                u.setNome(fieldNome.getText());
-                u.setEmail(fieldEmail.getText());
-                u.setSenha(fieldSenha.getText());
-                u.setIsAdmin(admin);
-                
-                AdminDAO dao = new AdminDAO();
-                dao.cadastrar(u);
+                if (fieldSenha.getText().isBlank()) {
+                    Usuario u = new Usuario();
+                    String admin = (adminCombo.getSelectedItem().equals("Sim")) ? "S" : "N";
 
-                JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
-                this.dispose();
+                    u.setNome(fieldNome.getText());
+                    u.setEmail(fieldEmail.getText());
+                    u.setIsAdmin(admin);
+
+                    AdminDAO dao = new AdminDAO();
+                    dao.alterarDados(u);
+
+                    JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
+                    this.dispose();
+                    
+                } else {
+                    Usuario u = new Usuario();
+                    String admin = (adminCombo.getSelectedItem().equals("Sim")) ? "S" : "N";
+
+                    u.setNome(fieldNome.getText());
+                    u.setEmail(fieldEmail.getText());
+                    u.setSenha(fieldSenha.getText());
+                    u.setIsAdmin(admin);
+
+                    AdminDAO dao = new AdminDAO();
+                    dao.alterarDadosSenha(u);
+
+                    JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
+                    this.dispose();
+                }
+
             } else {
                 Usuario u = new Usuario();
-                String admin = (adminCombo.getSelectedItem().equals("S")) ? "S" : "N";
+                String admin = (adminCombo.getSelectedItem().equals("Sim")) ? "S" : "N";
 
                 u.setNome(fieldNome.getText());
                 u.setEmail(fieldEmail.getText());

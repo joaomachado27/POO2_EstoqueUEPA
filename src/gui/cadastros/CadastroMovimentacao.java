@@ -158,7 +158,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        if (!jRadioButton1.isSelected() || !jRadioButton2.isSelected()) {
+        if (!(jRadioButton1.isSelected()) || !(jRadioButton2.isSelected())) {
             JOptionPane.showMessageDialog(rootPane, "Por favor escolha um tipo");
             return;
         }
@@ -187,7 +187,10 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao identificar produto.");
                 return;
             }
-
+            
+            ProdutoDAO produtoDAO = new ProdutoDAO();
+            produtoDAO.consultarID(idProduto);
+            
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
@@ -198,6 +201,7 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             dao.inserir(movimentacao);
 
             JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
+            
             btnLimparActionPerformed(evt);
 
         } catch (Exception e) {

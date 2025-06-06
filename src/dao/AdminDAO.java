@@ -39,19 +39,33 @@ public class AdminDAO {
         }
     }
 
-    public void alterar(Usuario usuario) throws Exception {
-        String sql = "UPDATE usuario SET nome = ?, senha = ?, isAdmin = ? WHERE email = ?";
+    public void alterarDados(Usuario usuario) throws Exception {
+        String sql = "UPDATE usuario SET nome = ?, email = ?, isAdmin = ? WHERE email = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
-            ps.setString(2, usuario.getSenha());
+            ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getIsAdmin());
             ps.setString(4, usuario.getEmail());
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do usuário: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    public void alterarDadosSenha(Usuario usuario) throws Exception {
+        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, isAdmin = ? WHERE email = ?";
 
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getEmail());
+            ps.setString(3, usuario.getSenha());
+            ps.setString(4, usuario.getIsAdmin());
+            ps.setString(5, usuario.getEmail());
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar dados do usuário: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void remover(Usuario usuario) {
@@ -86,7 +100,6 @@ public class AdminDAO {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro!: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
         return usuario;
     }
     
