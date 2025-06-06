@@ -7,7 +7,6 @@ import modelo.Usuario;
 public class CadastroUsuario extends javax.swing.JFrame {
 
     private boolean editMode = false;
-    private Usuario usuarioEditando = null;
 
     // padrao: cadastrar
     public CadastroUsuario() {
@@ -19,7 +18,6 @@ public class CadastroUsuario extends javax.swing.JFrame {
         initComponents();
 
         editMode = true;
-        usuarioEditando = usuario;
         jLabel4.setText("Alterar Usuario");
         fieldNome.setText(usuario.getNome());
         fieldEmail.setText(usuario.getEmail());

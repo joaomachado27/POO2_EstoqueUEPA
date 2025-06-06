@@ -155,8 +155,6 @@ public class ConsultasMov extends javax.swing.JFrame {
     @SuppressWarnings("empty-statement")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        System.out.print(jComboBox1.getSelectedIndex());
-        System.out.print(text.getText());
         
         MovimentacaoDAO dao = new MovimentacaoDAO();
         
@@ -168,7 +166,12 @@ public class ConsultasMov extends javax.swing.JFrame {
             
             movs = dao.consultDATA(jComboBox2.getSelectedIndex());
         } else if (jComboBox1.getSelectedIndex() == 2) {
+            
+            try{
             movs = dao.consultPod(Integer.parseInt(text.getText()));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(rootPane, "Por favor utilize o id do Produto ao pesquisar");
+            }
         }
         
         try {

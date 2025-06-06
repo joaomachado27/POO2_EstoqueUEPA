@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import modelo.Produto;
 
 
 public class MovimentacaoDAO {
@@ -37,6 +38,8 @@ public class MovimentacaoDAO {
         }
         
     }
+    
+    
     @FunctionalInterface
     interface PreparadorStatement {
         void preparar(PreparedStatement ps) throws SQLException;
@@ -86,12 +89,14 @@ public class MovimentacaoDAO {
         return movs;
     }
 
-    // O método de extração que criamos antes continua o mesmo
+    
     private List<Movimentacao> listarMovs(ResultSet rs) throws SQLException {
-    // ... lógica para ler o ResultSet e criar a lista de Movimentacao
+        ProdutoDAO dao = new ProdutoDAO();
+        Produto p = new Produto();
         List<Movimentacao> movs = new ArrayList<>();
         int count = 0;
         while (rs.next() && count < 20) {
+          
         Movimentacao movimentacao = new Movimentacao();
         movimentacao.setIdMov(rs.getInt("idMov"));
         movimentacao.setTipo(rs.getString("tipo"));
