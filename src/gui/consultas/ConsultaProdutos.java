@@ -6,6 +6,8 @@ import gui.cadastros.CadastroProduto;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -311,32 +313,104 @@ public class ConsultaProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          
+                 try {
+            TableModel model = tabelaProdutos.getModel();
+            // Define o caminho completo para o arquivo CSV.
+            // Você pode tornar isso configurável ou usar um JFileChooser para o usuário escolher.
+            File outputFile = new File();//tem que setar ainda
+            FileWriter csvWriter = new FileWriter(outputFile);
 
-    try {
+            // 1. Define os nomes das colunas que você deseja exportar.
+            List<String> desiredColumnNames = Arrays.asList("Nome", "Procedencia", "Estoque");
 
-        TableModel model = tabelaProdutos.getModel();
-        FileWriter csv = new FileWriter(new File("C:\\Users\\cacom\\OneDrive\\Documentos\\Export1.csv"));
-
-        for (int i = 0; i < model.getColumnCount(); i++) {
-            csv.write(model.getColumnName(i) + ",");
-        }
-
-        csv.write("\n");
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-            for (int j = 0; j < model.getColumnCount(); j++) {
-                csv.write(model.getValueAt(i, j).toString() + ",");
+            // 2. Encontra os índices reais dessas colunas no modelo da JTable.
+            // Isso garante que você pegue a coluna correta, independentemente da ordem.
+            List<Integer> desiredColumnIndices = new ArrayList<>();
+            for (String desiredName : desiredColumnNames) {
+                boolean found = false;
+                for (int col = 0; col < model.getColumnCount(); col++) {
+                    if (model.getColumnName(col).equals(desiredName)) {
+                        desiredColumnIndices.add(col);
+                        found = true;
+                        break; // Coluna encontrada, passa para o próximo nome desejado.
+                    }
+                }
+                if (!found) {
+                    // Exibe um aviso se uma coluna desejada não for encontrada na tabela.
+                    System.err.println("Aviso: Coluna '" + desiredName + "' não encontrada na tabela.");
+                    // Você pode optar por pular essa coluna ou exibir um erro fatal aqui.
+                }
             }
-            csv.write("\n");
+
+            // Verifica se alguma coluna foi encontrada antes de prosseguir
+            if (desiredColumnIndices.isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                    "Nenhuma das colunas especificadas ('Nome', 'Procedencia', 'Estoque') foi encontrada na tabela.",
+                    "Erro de Exportação", JOptionPane.WARNING_MESSAGE);
+                csvWriter.close();
+                return;
+            }
+
+            // 3. Escreve a linha do cabeçalho (nomes das colunas) no CSV.
+            for (int i = 0; i < desiredColumnNames.size(); i++) {
+                csvWriter.append(escapeCsvValue(desiredColumnNames.get(i))); // Escapa o nome da coluna
+                if (i < desiredColumnNames.size() - 1) {
+                    csvWriter.append(",");
+                }
+            }
+            csvWriter.append("\n"); // Nova linha após os cabeçalhos
+
+            // 4. Escreve as linhas de dados no CSV.
+            for (int row = 0; row < model.getRowCount(); row++) { // Itera por todas as linhas da tabela
+                for (int colIndex = 0; colIndex < desiredColumnIndices.size(); colIndex++) { // Itera pelas colunas desejadas
+                    int actualColumnModelIndex = desiredColumnIndices.get(colIndex);
+                    Object value = model.getValueAt(row, actualColumnModelIndex);
+
+                    // Converte o valor para String e aplica o escape de CSV.
+                    String cellValue = (value == null) ? "" : value.toString();
+                    csvWriter.append(escapeCsvValue(cellValue));
+
+                    if (colIndex < desiredColumnIndices.size() - 1) {
+                        csvWriter.append(",");
+                    }
+                }
+                csvWriter.append("\n"); // Nova linha após cada linha de dados
+            }
+
+            csvWriter.flush(); // Garante que todos os dados sejam escritos no arquivo
+            csvWriter.close(); // Fecha o FileWriter
+
+            JOptionPane.showMessageDialog(null,
+                "Dados exportados com sucesso para:\n" + outputFile.getAbsolutePath(),
+                "Exportação Concluída", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Erro ao exportar dados para CSV.\nVerifique se o arquivo não está em uso ou se você tem permissão de escrita.\nDetalhes: " + e.getMessage(),
+                "Erro de Exportação", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Ocorreu um erro inesperado durante a exportação: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
-        csv.close();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private static String escapeCsvValue(String value) {
+        if (value == null) {
+            return "";
+        }
+        // Se o valor contiver vírgulas, aspas duplas ou quebras de linha, ele deve ser envolvido em aspas.
+        // Além disso, todas as aspas duplas dentro do valor devem ser dobradas.
+        if (value.contains(",") || value.contains("\n") || value.contains("\"")) {
+            return "\"" + value.replace("\"", "\"\"") + "\"";
+        }
+        // Se o valor não contiver caracteres especiais, retorne-o como está.
+        return value;
+    }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnBuscar;
