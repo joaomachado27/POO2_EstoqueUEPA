@@ -168,15 +168,15 @@ public class CadastroProduto extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        try {
-            //validacao
-            if (editMode) {
-                if ((fieldNome.getText().isBlank()) || (fieldDescricao.getText().isBlank())
-                        || (fieldProcedencia.getText().isBlank())) {
-                    JOptionPane.showMessageDialog(null, "os campos não podem ser vazios");
-                    return;
-                }
+        //validacao
+        if ((fieldNome.getText().isBlank()) || (fieldDescricao.getText().isBlank())
+                || (fieldProcedencia.getText().isBlank())) {
+            JOptionPane.showMessageDialog(null, "os campos não podem estar vazios");
+            return;
+        }
 
+        try {
+            if (editMode) {
                 Produto produto = new Produto();
                 produto.setNome(fieldNome.getText());
                 produto.setDescricao(fieldDescricao.getText());
@@ -187,11 +187,11 @@ public class CadastroProduto extends javax.swing.JFrame {
                 produto.setIdProduto(produtoEditando.getIdProduto());
                 dao.atualizar(produto);
                 JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso");
-                
+                this.dispose();
+
             } else {
-                if ((fieldNome.getText().isBlank()) || (fieldDescricao.getText().isBlank())
-                 || (fieldProcedencia.getText().isBlank()) || (fieldQtde.getText().isBlank())) {
-                    JOptionPane.showMessageDialog(null, "Os campos não podem ser vazios");
+                if (fieldQtde.getText().isBlank()) {
+                    JOptionPane.showMessageDialog(null, "Os campos não podem estar vazios");
                     return;
                 }
 
@@ -201,7 +201,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                 produto.setProcedencia(fieldProcedencia.getText());
 
                 ProdutoDAO dao = new ProdutoDAO();
-                
+
                 dao.inserir(produto);
                 JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso");
                 btnLimparActionPerformed(evt);

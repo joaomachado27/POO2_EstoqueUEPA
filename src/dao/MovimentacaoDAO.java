@@ -6,7 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import modelo.Produto;
 
 public class MovimentacaoDAO {
 
@@ -35,10 +38,22 @@ public class MovimentacaoDAO {
         
     }
 
-    public Movimentacao consultar() {
-        String sql = "SELECT * from movimentacao";
+    public void consultarUsuario(String user) {
+        String sql = "SELECT * from movimentacao where usuarioResponsavel = ?";
+        
+        listarMovs(sql);
+    }
+    
+    public void consultPod(String prod) {
+        String sql = "SELECT * FROM movimentacao where idProduto = ?";
+        
+        listarMovs(sql);
+    }
+    
+    public List<Movimentacao> listarMovs(String sql) {
         Movimentacao movimentacao = new Movimentacao();
-
+        List<Movimentacao> MOVS = new ArrayList<>();
+        
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -55,9 +70,9 @@ public class MovimentacaoDAO {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao consultar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao consultar Movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        return movimentacao;
+        return MOVS;
     }
     /*
     

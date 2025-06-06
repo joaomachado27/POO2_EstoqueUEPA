@@ -6,8 +6,26 @@ import modelo.Usuario;
 
 public class CadastroUsuario extends javax.swing.JFrame {
 
+    private boolean editMode = false;
+    private Usuario usuarioEditando = null;
+
+    // padrao: cadastrar
     public CadastroUsuario() {
         initComponents();
+    }
+
+    // editar
+    public CadastroUsuario(Usuario usuario, ConsultaUsuario consultaUsuario) {
+        initComponents();
+
+        editMode = true;
+        usuarioEditando = usuario;
+        jLabel4.setText("Alterar Usuario");
+        fieldNome.setText(usuario.getNome());
+        fieldEmail.setText(usuario.getEmail());
+        fieldSenha.setText(usuario.getSenha());
+        adminCombo.setSelectedItem(usuario.getIsAdmin());
+        btnCadastrar.setText("Atualizar");
     }
 
     /**
@@ -134,39 +152,46 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         // TODO add your handling code here:
+        if (fieldNome.getText().isBlank() || fieldEmail.getText().isBlank()
+                || fieldSenha.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios");
+            return;
+        }
+        if (!fieldEmail.getText().endsWith("@uepa.br")) {
+            JOptionPane.showMessageDialog(rootPane, "Você deve utilizar um e-mail institucional!");
+            return;
+        }
+
         try {
-            if (fieldNome.getText().isBlank() || fieldEmail.getText().isBlank()
-                    || fieldSenha.getText().isBlank()) {
-                JOptionPane.showMessageDialog(rootPane, "Os campos não podem estar vazios");
-                return;
-            }
-            if (!fieldEmail.getText().endsWith("@uepa.br")) {
-                JOptionPane.showMessageDialog(rootPane, "Você deve utilizar um e-mail institucional!");
-                return;
-            }
+            if (editMode) {
+                Usuario u = new Usuario();
+                String admin = (adminCombo.getSelectedItem().equals("S")) ? "S" : "N";
+                
+                u.setNome(fieldNome.getText());
+                u.setEmail(fieldEmail.getText());
+                u.setSenha(fieldSenha.getText());
+                u.setIsAdmin(admin);
+                
+                AdminDAO dao = new AdminDAO();
+                dao.cadastrar(u);
 
-            Usuario u = new Usuario();
-            
-            String admin;
-            if (adminCombo.getSelectedIndex() == 0) {
-                admin = "N";
-            } else if (adminCombo.getSelectedIndex() == 1) {
-                admin = "S";
+                JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
+                this.dispose();
             } else {
-                JOptionPane.showMessageDialog(null, "Erro ao definir permissões do usuário.");
-                return;
+                Usuario u = new Usuario();
+                String admin = (adminCombo.getSelectedItem().equals("S")) ? "S" : "N";
+
+                u.setNome(fieldNome.getText());
+                u.setEmail(fieldEmail.getText());
+                u.setSenha(fieldSenha.getText());
+                u.setIsAdmin(admin);
+
+                AdminDAO dao = new AdminDAO();
+                dao.cadastrar(u);
+
+                JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi cadastrado com sucesso!");
+                btnLimparActionPerformed(evt);
             }
-
-            u.setNome(fieldNome.getText());
-            u.setEmail(fieldEmail.getText());
-            u.setSenha(fieldSenha.getText());
-            u.setIsAdmin(admin);
-
-            AdminDAO dao = new AdminDAO();
-            dao.cadastrar(u);
-            
-            JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi cadastrado com sucesso!");
-            btnLimparActionPerformed(evt);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
