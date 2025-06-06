@@ -15,7 +15,7 @@ public class ConsultaUsuario extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowActivated(java.awt.event.WindowEvent evt) {
-                LoadProdutos();
+                LoadUsuarios();
             }
         });
     }
@@ -159,12 +159,12 @@ public class ConsultaUsuario extends javax.swing.JFrame {
             return;
         }
 
-        String emailTable = tabelaUsuarios.getModel().getValueAt(row, 0).toString();
+        String emailTable = tabelaUsuarios.getModel().getValueAt(row, 1).toString();
 
         AdminDAO dao = new AdminDAO();
-        Usuario usuario = dao.consultarID(Integer.parseInt(idTable));
+        Usuario usuario = dao.buscar(emailTable);
 
-        CadastroProduto tela = new CadastroProduto(produto, this);
+        CadastroUsuario tela = new CadastroUsuario(usuario, this);
         tela.setVisible(true);
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
@@ -176,17 +176,17 @@ public class ConsultaUsuario extends javax.swing.JFrame {
             return;
         }
 
-        String id = tabelaUsuarios.getModel().getValueAt(row, 0).toString();
+        String emailTable = tabelaUsuarios.getModel().getValueAt(row, 1).toString();
 
-        ProdutoDAO dao = new ProdutoDAO();
-        Produto produto = dao.consultarID(Integer.parseInt(id));
+        AdminDAO dao = new AdminDAO();
+        Usuario usuario = dao.buscar(emailTable);
 
-        int valor = JOptionPane.showConfirmDialog(null, "Deseja apagar esse produto? \nNome: " + produto.getNome(), "Confirmar", JOptionPane.YES_NO_OPTION);
+        int valor = JOptionPane.showConfirmDialog(null, "Deseja inativar esse produto? \nNome: " + usuario.getNome(), "Confirmar", JOptionPane.YES_NO_OPTION);
         if (valor == 0) {
             try {
-                dao.remover(produto);
+                dao.remover(usuario);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao remover produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao inativar usuário \n", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnExcluirActionPerformed

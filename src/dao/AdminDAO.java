@@ -77,7 +77,7 @@ public class AdminDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     usuario.setNome(rs.getString("nome"));
-                    usuario.setSenha(rs.getString("senha"));
+                    usuario.setEmail(rs.getString("email"));
                     usuario.setIsAdmin(rs.getString("isAdmin"));
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuário informado não existe \n", "Erro", JOptionPane.ERROR_MESSAGE);
