@@ -19,14 +19,14 @@ public class LoginDAO {
     }
 
     public boolean fazerLogin(String email, String senha) {
-        String sql = "SELECT nome, senha, salt, isAdmin, ativo FROM usuario WHERE email = ?";
+        String sql = "SELECT nome, email, senha, salt, isAdmin, ativo FROM usuario WHERE email = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-
+                    
                     String ativo = rs.getString("ativo");
                     if (ativo.equalsIgnoreCase("N")) {
                         JOptionPane.showMessageDialog(null, "Usuário inativo!");
@@ -34,6 +34,7 @@ public class LoginDAO {
                     }
 
                     String nome = rs.getString("nome");
+                    String emailDB = rs.getString("email");
                     String senhadb = rs.getString("senha");
                     String salt = rs.getString("salt");
                     boolean admin = rs.getString("isAdmin").equalsIgnoreCase("S");
@@ -43,7 +44,7 @@ public class LoginDAO {
                     boolean senhaValida = PasswordHasher.verificarSenha(senha, senhadb, saltdb);
 
                     if (senhaValida) {
-                        Sessao.iniciarSessao(nome, email, admin);
+                        Sessao.iniciarSessao(nome, emailDB, admin);
                         return true;
                     } else {
                         JOptionPane.showMessageDialog(null, "Senha incorreta!: \n", "Erro", JOptionPane.ERROR_MESSAGE);

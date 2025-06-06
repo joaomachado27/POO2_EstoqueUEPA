@@ -28,8 +28,7 @@ public class ProdutoDAO {
             ps.setString(3, produto.getProcedencia());
             ps.setInt(4, produto.getQuantidade());
 
-            ps.execute();
-            ps.close();
+            ps.executeUpdate();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao inserir produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }

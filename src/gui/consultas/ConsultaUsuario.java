@@ -38,7 +38,9 @@ public class ConsultaUsuario extends javax.swing.JFrame {
         tabelaUsuarios = new javax.swing.JTable();
         btnVoltar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 1000));
+        setMinimumSize(new java.awt.Dimension(500, 500));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -82,16 +84,12 @@ public class ConsultaUsuario extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabelaUsuarios.setColumnSelectionAllowed(true);
         tabelaUsuarios.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaUsuarios);
-        tabelaUsuarios.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaUsuarios.getColumnModel().getColumnCount() > 0) {
             tabelaUsuarios.getColumnModel().getColumn(0).setResizable(false);
             tabelaUsuarios.getColumnModel().getColumn(1).setResizable(false);
             tabelaUsuarios.getColumnModel().getColumn(2).setResizable(false);
-            tabelaUsuarios.getColumnModel().getColumn(3).setResizable(false);
-            tabelaUsuarios.getColumnModel().getColumn(4).setResizable(false);
         }
 
         btnVoltar.setText("Voltar");
@@ -111,31 +109,31 @@ public class ConsultaUsuario extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCadastrar)
-                        .addGap(38, 38, 38)
+                        .addGap(18, 18, 18)
                         .addComponent(btnAtualizar)
-                        .addGap(50, 50, 50)
+                        .addGap(18, 18, 18)
                         .addComponent(btnExcluir))
-                    .addComponent(jLabel1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnVoltar)
-                        .addGap(15, 15, 15)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(709, 709, 709)
+                        .addComponent(btnVoltar)))
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnVoltar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnExcluir)
                     .addComponent(btnAtualizar)
                     .addComponent(btnCadastrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnVoltar)
-                .addGap(25, 25, 25))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -163,6 +161,7 @@ public class ConsultaUsuario extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         CadastroUsuario tela = new CadastroUsuario();
         tela.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
@@ -180,13 +179,14 @@ public class ConsultaUsuario extends javax.swing.JFrame {
 
         CadastroUsuario tela = new CadastroUsuario(usuario);
         tela.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         int row = tabelaUsuarios.getSelectedRow();
 
         if (row == -1) {
-            JOptionPane.showMessageDialog(null, "Você deve selecionar um produto da tabela!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Você deve selecionar um usuario da tabela!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -195,7 +195,7 @@ public class ConsultaUsuario extends javax.swing.JFrame {
         AdminDAO dao = new AdminDAO();
         Usuario usuario = dao.buscar(emailTable);
 
-        int valor = JOptionPane.showConfirmDialog(null, "Deseja inativar esse produto? \nNome: " + usuario.getNome(), "Confirmar", JOptionPane.YES_NO_OPTION);
+        int valor = JOptionPane.showConfirmDialog(null, "Deseja inativar esse usuario? \nNome: " + usuario.getNome(), "Confirmar", JOptionPane.YES_NO_OPTION);
         if (valor == 0) {
             try {
                 dao.remover(usuario);

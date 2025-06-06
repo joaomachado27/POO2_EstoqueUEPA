@@ -3,6 +3,7 @@ package gui;
 import gui.cadastros.CadastroMovimentacao;
 import gui.consultas.ConsultaProdutos;
 import gui.consultas.ConsultaMovimentacao;
+import gui.consultas.ConsultaUsuario;
 import utils.Sessao;
 
 public class Navegacao extends javax.swing.JFrame {
@@ -31,7 +32,7 @@ public class Navegacao extends javax.swing.JFrame {
         btnEstoque = new javax.swing.JButton();
         btnAdmin = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         btnSair.setText("Encerrar Sessão");
@@ -77,27 +78,26 @@ public class Navegacao extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(161, 161, 161)
-                        .addComponent(btnSair))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnProdutos)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnEstoque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAdmin)
-                                .addComponent(btnRelatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1))))
-                .addGap(0, 28, Short.MAX_VALUE))
+                    .addComponent(btnSair)
+                    .addComponent(jLabel1))
+                .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
+                .addGap(35, 35, 35)
                 .addComponent(btnProdutos)
                 .addGap(18, 18, 18)
                 .addComponent(btnEstoque)
@@ -105,9 +105,9 @@ public class Navegacao extends javax.swing.JFrame {
                 .addComponent(btnRelatorios)
                 .addGap(18, 18, 18)
                 .addComponent(btnAdmin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btnSair)
-                .addGap(24, 24, 24))
+                .addGap(39, 39, 39))
         );
 
         pack();
@@ -115,7 +115,6 @@ public class Navegacao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        // TODO add your handling code here:
         Sessao.encerrarSessao();
         Login login = new Login();
         login.setVisible(true);
@@ -123,7 +122,6 @@ public class Navegacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
-        // TODO add your handling code here:
         ConsultaProdutos telaProdutos = new ConsultaProdutos();
         telaProdutos.setVisible(true);
         
@@ -131,7 +129,6 @@ public class Navegacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProdutosActionPerformed
 
     private void btnEstoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstoqueActionPerformed
-        // TODO add your handling code here:
         CadastroMovimentacao telaMovimentacao = new CadastroMovimentacao();
         telaMovimentacao.setVisible(true);
         
@@ -139,7 +136,6 @@ public class Navegacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEstoqueActionPerformed
 
     private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
-        
         ConsultaMovimentacao telaRelatorio = new ConsultaMovimentacao();
         telaRelatorio.setVisible(true);
         
@@ -147,6 +143,10 @@ public class Navegacao extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRelatoriosActionPerformed
 
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
+        ConsultaUsuario telaUsuario = new ConsultaUsuario();
+        telaUsuario.setVisible(true);
+        
+        this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

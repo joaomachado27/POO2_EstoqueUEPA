@@ -19,8 +19,7 @@ public class MovimentacaoDAO {
         this.conn = new ConnectionFactory().getConnection();
     }
 
-    public void inserir(Movimentacao movimentacao) throws Exception {
-
+    public void inserir(Movimentacao movimentacao) {
         String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -29,11 +28,9 @@ public class MovimentacaoDAO {
             ps.setInt(3, movimentacao.getQuantidade());
             ps.setString(4, movimentacao.getUsuarioResponsavel());
 
-            ps.execute();
-            ps.close();
-
+            ps.executeUpdate();
         } catch (SQLException e) {
-            throw new Exception(e);
+            JOptionPane.showMessageDialog(null, "Falha ao registrar movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -45,18 +42,24 @@ public class MovimentacaoDAO {
     }
 
     public List<Movimentacao> consultarUsuario(String user) {
-        String sql = "SELECT * from movimentacao where usuario LIKE ?";
+        String sql = "SELECT m.*, p.nome AS nomeProduto FROM movimentacao m "
+                + "JOIN produtos p ON m.idProduto = p.idProdutos "
+                + "WHERE p.ativo = 'S' AND usuario LIKE ?";
 
         return executarConsulta(sql, ps -> ps.setString(1, user + "%"));
     }
 
-    public List<Movimentacao> consultPod(int prod) {
-        String sql = "SELECT * FROM movimentacao where idProduto = ?";
-        return executarConsulta(sql, ps -> ps.setInt(1, prod));
+    public List<Movimentacao> consultPod(String prod) {
+        String sql = "SELECT m.*, p.nome AS nomeProduto FROM movimentacao m "
+                + "JOIN produtos p ON m.idProduto = p.idProdutos "
+                + "WHERE p.ativo = 'S' AND p.nome LIKE ?";
+        return executarConsulta(sql, ps -> ps.setString(1, prod + "%"));
     }
 
     public List<Movimentacao> consultDATA(int variavel) {
-        String sql = "SELECT * from movimentacao where DATEDIFF(NOW(), data) <= ?";
+        String sql = "SELECT m.*, p.nome AS nomeProduto FROM movimentacao m "
+                + "JOIN produtos p ON m.idProduto = p.idProdutos "
+                + "WHERE p.ativo = 'S' AND DATEDIFF(NOW(), data) <= ?";
         List<Integer> escopo = List.of(1, 7, 30, 180, 365);
 
         if (variavel < 0 || variavel >= escopo.size()) {
@@ -68,7 +71,7 @@ public class MovimentacaoDAO {
         return executarConsulta(sql, ps -> ps.setInt(1, dias));
     }
 
-    public List<Movimentacao> executarConsulta(String sql, PreparadorStatement preparador) {
+    private List<Movimentacao> executarConsulta(String sql, PreparadorStatement preparador) {
         List<Movimentacao> movs = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -97,9 +100,9 @@ public class MovimentacaoDAO {
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setIdMov(rs.getInt("idMov"));
             movimentacao.setTipo(rs.getString("tipo"));
-            movimentacao.setIdProduto(rs.getInt("idProduto"));
-            movimentacao.setData(rs.getDate("data") != null ? rs.getDate("data").toString() : null);
-            movimentacao.setHora(rs.getTime("hora") != null ? rs.getTime("hora").toString() : null);
+            movimentacao.setNomeProduto(rs.getString("nomeProduto"));
+            movimentacao.setData(rs.getDate("data").toString());
+            movimentacao.setHora(rs.getTime("hora").toString());
             movimentacao.setQuantidade(rs.getInt("quantidade"));
             movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
             movs.add(movimentacao);
@@ -107,24 +110,31 @@ public class MovimentacaoDAO {
         }
         return movs;
     }
+
+    public List<Movimentacao> listar() {
+        String sql = "SELECT m.*, p.nome AS nomeProduto FROM movimentacao m "
+                + "JOIN produtos p ON m.idProduto = p.idProdutos "
+                + "WHERE p.ativo = 'S'";
+        List<Movimentacao> movimentacoes = new ArrayList<>();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Movimentacao movimentacao = new Movimentacao();
+                movimentacao.setIdMov(rs.getInt("idMov"));
+                movimentacao.setTipo(rs.getString("tipo"));
+                movimentacao.setNomeProduto(rs.getString("nomeProduto"));
+                movimentacao.setData(rs.getDate("data").toString());
+                movimentacao.setHora(rs.getTime("hora").toString());
+                movimentacao.setQuantidade(rs.getInt("quantidade"));
+                movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
+                
+                movimentacoes.add(movimentacao);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar produto: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return movimentacoes;
+    }
 }
-/*
-    
-    --TRIGGERS 
-    
-    --Trigger para alterar o estoque de produtos 
-        CREATE DEFINER=`root`@`localhost` TRIGGER `TG_addEstoque` AFTER INSERT ON `movimentacao` FOR EACH ROW BEGIN
-if new.tipo = 'ENTRADA' then
-	update produtos p set p.quantidade = p.quantidade + new.quantidade where new.idProduto = p.idProdutos;
-else 
-	update produtos p set p.quantidade = p.quantidade - new.quantidade where new.idProduto = p.idProdutos;
-END if;
-end
-    
-    --Trigger para impedir que quantidade produto fique negativo
-    CREATE DEFINER=`root`@`localhost` TRIGGER `TG_semestoque` BEFORE INSERT ON `movimentacao` FOR EACH ROW BEGIN
-	if ((SELECT quantidade from produtos as p where p.idProdutos = new.idProduto) < new.quantidade) and (new.tipo = 'SAIDA')then
-    SIGNAL SQLSTATE '45000';
-	end IF;
-END
- */

@@ -3,15 +3,9 @@ package gui.consultas;
 import dao.ProdutoDAO;
 import gui.Navegacao;
 import gui.cadastros.CadastroProduto;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import modelo.Produto;
 
 public class ConsultaProdutos extends javax.swing.JFrame {
@@ -49,6 +43,9 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 1000));
+        setMinimumSize(new java.awt.Dimension(800, 800));
+        setPreferredSize(new java.awt.Dimension(989, 562));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -63,7 +60,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
             }
         });
 
-        btnCadastrar.setText("Cadastrar Produto");
+        btnCadastrar.setText("Cadastrar");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarActionPerformed(evt);
@@ -101,10 +98,8 @@ public class ConsultaProdutos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tabelaProdutos.setColumnSelectionAllowed(true);
         tabelaProdutos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabelaProdutos);
-        tabelaProdutos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (tabelaProdutos.getColumnModel().getColumnCount() > 0) {
             tabelaProdutos.getColumnModel().getColumn(0).setResizable(false);
             tabelaProdutos.getColumnModel().getColumn(1).setResizable(false);
@@ -131,11 +126,11 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -143,44 +138,44 @@ public class ConsultaProdutos extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(fieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnBuscar)
-                                .addGap(365, 365, 365)
+                                .addComponent(btnBuscar))
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(192, 192, 192)
+                                .addComponent(btnVoltar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(btnCadastrar)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnAtualizar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnExcluir))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnCadastrar)))
-                        .addGap(60, 60, 60))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(30, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVoltar)
-                .addGap(43, 43, 43))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnExcluir))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 931, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(29, 29, 29))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(btnCadastrar))
-                .addGap(39, 39, 39)
+                    .addComponent(btnVoltar))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(fieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar)
                     .addComponent(btnExcluir)
                     .addComponent(btnAtualizar)
-                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCadastrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(btnVoltar)
-                .addGap(21, 21, 21))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -207,48 +202,51 @@ public class ConsultaProdutos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         int tipoSel = comboTipo.getSelectedIndex();
-        
+
         String busca = fieldBusca.getText();
         if (fieldBusca.getText().isBlank()) {
-                JOptionPane.showMessageDialog(null, "O campo não pode ser vazio");
-                LoadProdutos();
-                return;
-            }
-        
-        if (tipoSel == 1) {
-            ProdutoDAO dao = new ProdutoDAO();
-            Produto produto = dao.consultarID(Integer.parseInt(busca));
-            
-            try {
-                DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();
-                DFT.setRowCount(0);
+            JOptionPane.showMessageDialog(null, "O campo não pode ser vazio");
+            LoadProdutos();
+            return;
+        }
 
-                DFT.addRow(new Object[]{produto.getIdProduto(), produto.getNome(), produto.getDescricao(), produto.getProcedencia(), produto.getQuantidade()});
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao buscar produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-            
-        } else if (tipoSel == 2) {
-            ProdutoDAO dao = new ProdutoDAO();
-            Produto produto = dao.consultarNome(busca);
-            
-            try {
-                DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();
-                DFT.setRowCount(0);
+        switch (tipoSel) {
+            case 1: {
+                ProdutoDAO dao = new ProdutoDAO();
+                Produto produto = dao.consultarID(Integer.parseInt(busca));
+                try {
+                    DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();
+                    DFT.setRowCount(0);
 
-                DFT.addRow(new Object[]{produto.getIdProduto(), produto.getNome(), produto.getDescricao(), produto.getProcedencia(), produto.getQuantidade()});
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao buscar produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                    DFT.addRow(new Object[]{produto.getIdProduto(), produto.getNome(), produto.getDescricao(), produto.getProcedencia(), produto.getQuantidade()});
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
             }
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione um filtro! \n", "Erro", JOptionPane.ERROR_MESSAGE);
+            case 2: {
+                ProdutoDAO dao = new ProdutoDAO();
+                Produto produto = dao.consultarNome(busca);
+                try {
+                    DefaultTableModel DFT = (DefaultTableModel) tabelaProdutos.getModel();
+                    DFT.setRowCount(0);
+
+                    DFT.addRow(new Object[]{produto.getIdProduto(), produto.getNome(), produto.getDescricao(), produto.getProcedencia(), produto.getQuantidade()});
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+            default:
+                JOptionPane.showMessageDialog(null, "Selecione um filtro! \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                break;
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         CadastroProduto tela = new CadastroProduto();
         tela.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
@@ -266,6 +264,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
 
         CadastroProduto tela = new CadastroProduto(produto);
         tela.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -300,21 +299,7 @@ public class ConsultaProdutos extends javax.swing.JFrame {
         n.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
-    
-    private static String escapeCsvValue(String value) {
-        if (value == null) {
-            return "";
-        }
-        // Se o valor contiver vírgulas, aspas duplas ou quebras de linha, ele deve ser envolvido em aspas.
-        // Além disso, todas as aspas duplas dentro do valor devem ser dobradas.
-        if (value.contains(",") || value.contains("\n") || value.contains("\"")) {
-            return "\"" + value.replace("\"", "\"\"") + "\"";
-        }
-        // Se o valor não contiver caracteres especiais, retorne-o como está.
-        return value;
-    }
 
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnBuscar;

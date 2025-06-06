@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui.consultas;
 
 import dao.MovimentacaoDAO;
@@ -20,19 +16,18 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Movimentacao;
 import modelo.Produto;
 
-
-/**
- *
- * @author cacom
- */
 public class ConsultaMovimentacao extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ConsultasMov
-     */
     public ConsultaMovimentacao() {
         initComponents();
-        jComboBox2.setVisible(false);
+        cbData.setVisible(false);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                LoadMovimentacoes();
+            }
+        });
     }
 
     /**
@@ -47,14 +42,17 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaMov = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        text = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbTipo = new javax.swing.JComboBox<>();
+        fieldBusca = new javax.swing.JTextField();
         btnVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnGerarCSV = new javax.swing.JButton();
+        cbData = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 1000));
+        setMinimumSize(new java.awt.Dimension(700, 700));
+        setPreferredSize(new java.awt.Dimension(985, 576));
 
         tabelaMov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,6 +97,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
             tabelaMov.getColumnModel().getColumn(2).setResizable(false);
             tabelaMov.getColumnModel().getColumn(3).setResizable(false);
             tabelaMov.getColumnModel().getColumn(4).setResizable(false);
+            tabelaMov.getColumnModel().getColumn(5).setResizable(false);
             tabelaMov.getColumnModel().getColumn(6).setResizable(false);
         }
 
@@ -109,17 +108,10 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "Data", "Produto" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "Data", "Produto" }));
+        cbTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ultimo dia", "Ultima semana", "Ultimos 30 dias", "Ultimo semestre", "Ultimo Ano" }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+                cbTipoActionPerformed(evt);
             }
         });
 
@@ -133,120 +125,152 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Movimentações");
 
-        jButton1.setText("Gerar Relatório");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGerarCSV.setText("Gerar Relatório");
+        btnGerarCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGerarCSVActionPerformed(evt);
             }
         });
+
+        cbData.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ultimo dia", "Ultima semana", "Ultimos 30 dias", "Ultimo semestre", "Ultimo Ano" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 917, Short.MAX_VALUE)
-                        .addGap(28, 28, 28))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(btnBuscar)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(text, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 415, Short.MAX_VALUE)
+                        .addComponent(btnGerarCSV))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnVoltar)
-                        .addGap(42, 42, 42))))
+                        .addComponent(btnVoltar)))
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(btnVoltar))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuscar)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVoltar)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                    .addComponent(cbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fieldBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGerarCSV)
+                    .addComponent(cbData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    @SuppressWarnings("empty-statement")
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        
-        MovimentacaoDAO dao = new MovimentacaoDAO();
-        
-        List<Movimentacao> movs = new ArrayList<>();
-        
-        if (jComboBox1.getSelectedIndex() == 0) {
-            movs = dao.consultarUsuario(text.getText());
-        } else if (jComboBox1.getSelectedIndex() == 1) {
-            
-            movs = dao.consultDATA(jComboBox2.getSelectedIndex());
-        } else if (jComboBox1.getSelectedIndex() == 2) {
-            
-            try{
-            movs = dao.consultPod(Integer.parseInt(text.getText()));
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(rootPane, "Por favor utilize o id do Produto ao pesquisar");
-            }
-        }
-        
+    public void LoadMovimentacoes() {
         try {
+            MovimentacaoDAO dao = new MovimentacaoDAO();
+            List<Movimentacao> movimentacoes = dao.listar();
+
             DefaultTableModel DFT = (DefaultTableModel) tabelaMov.getModel();
             DFT.setRowCount(0);
-            for (Movimentacao m : movs) {
-                DFT.addRow(new Object[]{ m.getIdMov(), m.getTipo(), m.getIdProduto(), m.getData(), m.getHora(), m.getQuantidade(), m.getUsuarioResponsavel()});
+
+            for (Movimentacao movimentacao : movimentacoes) {
+                DFT.addRow(new Object[]{movimentacao.getIdMov(), movimentacao.getTipo(), movimentacao.getNomeProduto(), movimentacao.getData(), movimentacao.getHora(), movimentacao.getQuantidade(), movimentacao.getUsuarioResponsavel()});
             }
+
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar produto \n", "Erro", JOptionPane.ERROR_MESSAGE);
-        } 
-            
-          
-    
+            JOptionPane.showMessageDialog(null, "Erro ao carregar database: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
+    }
+
+    @SuppressWarnings("empty-statement")
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        List<Movimentacao> movimentacoes = new ArrayList<>();
+        MovimentacaoDAO dao = new MovimentacaoDAO();
+
+        switch (cbTipo.getSelectedIndex()) {
+            case 0: {
+                if (fieldBusca.getText().isBlank()) {
+                    JOptionPane.showMessageDialog(null, "O campo de busca não pode estar vazio!");
+                }
+                movimentacoes = dao.consultarUsuario(fieldBusca.getText());
+                try {
+                    DefaultTableModel DFT = (DefaultTableModel) tabelaMov.getModel();
+                    DFT.setRowCount(0);
+
+                    for (Movimentacao m : movimentacoes) {
+                        DFT.addRow(new Object[]{m.getIdMov(), m.getTipo(), m.getNomeProduto(), m.getData(), m.getHora(), m.getQuantidade(), m.getUsuarioResponsavel()});
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar movimentação \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+            case 1: {
+                movimentacoes = dao.consultDATA(cbData.getSelectedIndex());
+                try {
+                    DefaultTableModel DFT = (DefaultTableModel) tabelaMov.getModel();
+                    DFT.setRowCount(0);
+
+                    for (Movimentacao m : movimentacoes) {
+                        DFT.addRow(new Object[]{m.getIdMov(), m.getTipo(), m.getNomeProduto(), m.getData(), m.getHora(), m.getQuantidade(), m.getUsuarioResponsavel()});
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar movimentação \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+            case 2: {
+                if (fieldBusca.getText().isBlank()) {
+                    JOptionPane.showMessageDialog(null, "O campo de busca não pode estar vazio!");
+                }
+                movimentacoes = dao.consultPod(fieldBusca.getText());
+                try {
+                    DefaultTableModel DFT = (DefaultTableModel) tabelaMov.getModel();
+                    DFT.setRowCount(0);
+
+                    for (Movimentacao m : movimentacoes) {
+                        DFT.addRow(new Object[]{m.getIdMov(), m.getTipo(), m.getNomeProduto(), m.getData(), m.getHora(), m.getQuantidade(), m.getUsuarioResponsavel()});
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao buscar movimentação \n", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+            default:
+                LoadMovimentacoes();
+                break;
+        }
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-        if (jComboBox1.getSelectedIndex() == 1) {
-            text.setVisible(false);
-            jComboBox2.setVisible(true);
+    private void cbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoActionPerformed
+        if (cbTipo.getSelectedIndex() == 1) {
+            fieldBusca.setVisible(false);
+            cbData.setVisible(true);
+            LoadMovimentacoes();
         } else {
-            text.setVisible(true);
-            jComboBox2.setVisible(false);
-            
+            fieldBusca.setVisible(true);
+            cbData.setVisible(false);
+            LoadMovimentacoes();
         }
-        
-        for (int i=0;i==1;i++) {
-        jComboBox1ActionPerformed(evt);
-        DefaultTableModel DFT = (DefaultTableModel) tabelaMov.getModel();
-            DFT.setRowCount(0);
-    }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }//GEN-LAST:event_cbTipoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         Navegacao n = new Navegacao();
@@ -254,19 +278,19 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGerarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarCSVActionPerformed
         // TODO add your handling code here:
-        
+
         ProdutoDAO dao = new ProdutoDAO();
         List<Produto> ps = dao.listar();
-        
+
         JFileChooser seletorArquivo = new JFileChooser();
         seletorArquivo.setDialogTitle("Salvar arquivo CSV");
-        
+
         // Define um filtro para mostrar apenas arquivos .csv
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos CSV (*.csv)", "csv");
         seletorArquivo.setFileFilter(filtro);
-        
+
         // Sugere um nome de arquivo padrão
         seletorArquivo.setSelectedFile(new File("produtos.csv"));
 
@@ -275,7 +299,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File arquivoParaSalvar = seletorArquivo.getSelectedFile();
-            
+
             // Garante que o arquivo tenha a extensão .csv
             String caminhoArquivo = arquivoParaSalvar.getAbsolutePath();
             if (!caminhoArquivo.toLowerCase().endsWith(".csv")) {
@@ -286,7 +310,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
 
             // Usa try-with-resources para garantir que o FileWriter feche automaticamente
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivoParaSalvar))) {
-                
+
                 // --- AQUI VOCÊ ESCOLHE OS ATRIBUTOS ---
                 // Escreve o cabeçalho do CSV (os títulos das colunas)
                 writer.append("NOME");
@@ -299,12 +323,12 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                 // Itera sobre a lista de produtos
                 for (Produto p : ps) {
                     // Escreve os dados de cada produto na ordem do cabeçalho
-                    writer.append(p.getNome()); 
+                    writer.append(p.getNome());
                     writer.append(",");
                     writer.append(p.getProcedencia());
                     writer.append(",");
-                    writer.append(  String.valueOf(p.getQuantidade()));
-                    writer.append("\n"); 
+                    writer.append(String.valueOf(p.getQuantidade()));
+                    writer.append("\n");
                 }
 
                 System.out.println("Arquivo CSV gerado com sucesso!");
@@ -316,23 +340,22 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         } else {
             System.out.println("Operação de salvar cancelada pelo usuário.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnGerarCSVActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnGerarCSV;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> cbData;
+    private javax.swing.JComboBox<String> cbTipo;
+    private javax.swing.JTextField fieldBusca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaMov;
-    private javax.swing.JTextField text;
     // End of variables declaration//GEN-END:variables
 
 }

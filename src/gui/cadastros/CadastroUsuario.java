@@ -8,6 +8,7 @@ import modelo.Usuario;
 public class CadastroUsuario extends javax.swing.JFrame {
 
     private boolean editMode = false;
+    private String emailOriginal;
 
     // padrao: cadastrar
     public CadastroUsuario() {
@@ -22,8 +23,10 @@ public class CadastroUsuario extends javax.swing.JFrame {
         jLabel4.setText("Alterar Usuario");
         fieldNome.setText(usuario.getNome());
         fieldEmail.setText(usuario.getEmail());
-        adminCombo.setSelectedItem(usuario.getIsAdmin());
+        adminCombo.setSelectedItem((usuario.getIsAdmin()).equalsIgnoreCase("S") ? "Sim" : "Não");
         btnCadastrar.setText("Atualizar");
+        
+        emailOriginal = usuario.getEmail();
     }
 
     /**
@@ -46,8 +49,9 @@ public class CadastroUsuario extends javax.swing.JFrame {
         adminCombo = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         fieldNome = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         fieldEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -88,10 +92,10 @@ public class CadastroUsuario extends javax.swing.JFrame {
 
         fieldNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jButton1.setText("Voltar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnVoltarActionPerformed(evt);
             }
         });
 
@@ -101,15 +105,13 @@ public class CadastroUsuario extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jLabel4)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(adminCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(adminCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(fieldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,21 +119,25 @@ public class CadastroUsuario extends javax.swing.JFrame {
                         .addComponent(fieldNome)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnLimpar)
                             .addGap(18, 18, 18)
-                            .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(12, 12, 12)))
-                    .addComponent(fieldSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVoltar)
+                .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(btnVoltar))
+                .addGap(25, 25, 25)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -147,12 +153,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(adminCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLimpar)
                     .addComponent(btnCadastrar)
-                    .addComponent(jButton1))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(btnLimpar))
+                .addGap(29, 29, 29))
         );
 
         pack();
@@ -179,12 +184,15 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     u.setNome(fieldNome.getText());
                     u.setEmail(fieldEmail.getText());
                     u.setIsAdmin(admin);
+                    
+                    System.out.printf(u.getEmail());
 
                     AdminDAO dao = new AdminDAO();
-                    dao.alterarDados(u);
+                    dao.alterarDados(u, emailOriginal);
 
                     JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
                     this.dispose();
+                    btnVoltarActionPerformed(evt);
                     
                 } else {
                     Usuario u = new Usuario();
@@ -196,10 +204,11 @@ public class CadastroUsuario extends javax.swing.JFrame {
                     u.setIsAdmin(admin);
 
                     AdminDAO dao = new AdminDAO();
-                    dao.alterarDadosSenha(u);
+                    dao.alterarDadosSenha(u, emailOriginal);
 
                     JOptionPane.showMessageDialog(rootPane, "O usuário " + u.getNome() + " foi atualizado com sucesso!");
                     this.dispose();
+                    btnVoltarActionPerformed(evt);
                 }
 
             } else {
@@ -237,21 +246,21 @@ public class CadastroUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_adminComboActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         ConsultaUsuario consultaUsuario = new ConsultaUsuario();
         consultaUsuario.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> adminCombo;
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JTextField fieldEmail;
     private javax.swing.JTextField fieldNome;
     private javax.swing.JTextField fieldSenha;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
