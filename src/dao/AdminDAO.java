@@ -56,14 +56,19 @@ public class AdminDAO {
     }
 
     public void alterarDadosSenha(Usuario usuario, String emailOriginal) {
-        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, isAdmin = ? WHERE email = ?";
+        String sql = "UPDATE usuario SET nome = ?, email = ?, senha = ?, salt=?, isAdmin = ? WHERE email = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            byte[] salt = PasswordHasher.gerarSalt();
+            String senhaHashed = PasswordHasher.hashSenha(usuario.getSenha(), salt);
+            String saltstring = Base64.getEncoder().encodeToString(salt);
+
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEmail());
-            ps.setString(3, usuario.getSenha());
-            ps.setString(4, usuario.getIsAdmin());
-            ps.setString(5, emailOriginal);
+            ps.setString(3, senhaHashed);
+            ps.setString(4, saltstring);
+            ps.setString(5, usuario.getIsAdmin());
+            ps.setString(6, emailOriginal);
 
             ps.executeUpdate();
         } catch (SQLException e) {

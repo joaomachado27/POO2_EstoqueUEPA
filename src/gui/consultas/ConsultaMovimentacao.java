@@ -52,7 +52,6 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(700, 700));
-        setPreferredSize(new java.awt.Dimension(985, 576));
 
         tabelaMov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -269,7 +268,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
             fieldBusca.setVisible(true);
             cbData.setVisible(false);
             LoadMovimentacoes();
-        }
+        } 
     }//GEN-LAST:event_cbTipoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -314,9 +313,9 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                 // --- AQUI VOCÊ ESCOLHE OS ATRIBUTOS ---
                 // Escreve o cabeçalho do CSV (os títulos das colunas)
                 writer.append("NOME");
-                writer.append(",");
+                writer.append(";");
                 writer.append("PROCEDÊNCIA");
-                writer.append(",");
+                writer.append(";");
                 writer.append("QUANTIDADE");
                 writer.append("\n"); // Pula para a próxima linha
 
@@ -324,9 +323,9 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                 for (Produto p : ps) {
                     // Escreve os dados de cada produto na ordem do cabeçalho
                     writer.append(p.getNome());
-                    writer.append(",");
+                    writer.append(";");
                     writer.append(p.getProcedencia());
-                    writer.append(",");
+                    writer.append(";");
                     writer.append(String.valueOf(p.getQuantidade()));
                     writer.append("\n");
                 }

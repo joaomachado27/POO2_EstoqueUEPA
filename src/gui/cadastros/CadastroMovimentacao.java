@@ -206,24 +206,21 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 return;
             }
 
-            ProdutoDAO produtoDAO = new ProdutoDAO();
-            produtoDAO.consultarID(idProduto);
 
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
             movimentacao.setUsuarioResponsavel(Sessao.getEmail());
             movimentacao.setIdProduto(idProduto);
+            
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.inserir(movimentacao);
-
-            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
-
+            
             btnLimparActionPerformed(evt);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+            JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados:\n" + e, "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
