@@ -19,7 +19,7 @@ public class MovimentacaoDAO {
         this.conn = new ConnectionFactory().getConnection();
     }
 
-    public void inserir(Movimentacao movimentacao) throws Exception {
+    public void inserir(Movimentacao movimentacao) {
         String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -29,13 +29,15 @@ public class MovimentacaoDAO {
             ps.setString(4, movimentacao.getUsuarioResponsavel());
 
             ps.executeUpdate();
+
+            ProdutoDAO produtoDAO = new ProdutoDAO();
+            Produto p = produtoDAO.consultarID(movimentacao.getIdProduto());
+
+            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso\n Agora temos " + p.getQuantidade() + " em estoque para " + p.getNome());
+
         } catch (SQLException e) {
-            if (e.toString().contains("Unhandled")) {
-                
-                throw new Exception(e);
-            } else {
             JOptionPane.showMessageDialog(null, "Falha ao registrar movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            } 
+
         }
 
     }
@@ -83,12 +85,10 @@ public class MovimentacaoDAO {
             preparador.preparar(ps);
 
             try (ResultSet rs = ps.executeQuery()) {
-
                 movs = listarMovs(rs);
             }
 
         } catch (SQLException ex) {
-
             JOptionPane.showMessageDialog(null, "Erro ao executar consulta: \n" + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 
         }
@@ -96,8 +96,6 @@ public class MovimentacaoDAO {
     }
 
     private List<Movimentacao> listarMovs(ResultSet rs) throws SQLException {
-        ProdutoDAO dao = new ProdutoDAO();
-        Produto p = new Produto();
         List<Movimentacao> movs = new ArrayList<>();
         int count = 0;
         while (rs.next() && count < 20) {
@@ -132,7 +130,7 @@ public class MovimentacaoDAO {
                 movimentacao.setHora(rs.getTime("hora").toString());
                 movimentacao.setQuantidade(rs.getInt("quantidade"));
                 movimentacao.setUsuarioResponsavel(rs.getString("usuario"));
-                
+
                 movimentacoes.add(movimentacao);
             }
 

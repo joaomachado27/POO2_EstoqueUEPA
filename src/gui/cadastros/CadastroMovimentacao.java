@@ -206,8 +206,6 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
                 return;
             }
 
-            ProdutoDAO produtoDAO = new ProdutoDAO();
-            
 
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
@@ -218,14 +216,10 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.inserir(movimentacao);
             
-            Produto p = produtoDAO.consultarID(idProduto);
-            
-            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso\n Agora temos "+p.getQuantidade()+" em estoque para "+p.getNome());
-
             btnLimparActionPerformed(evt);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Não existe essa quantidade em estoque para esse produto\n", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados:\n" + e, "Erro", JOptionPane.ERROR_MESSAGE);
         } 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

@@ -313,9 +313,9 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                 // --- AQUI VOCÊ ESCOLHE OS ATRIBUTOS ---
                 // Escreve o cabeçalho do CSV (os títulos das colunas)
                 writer.append("NOME");
-                writer.append(",");
+                writer.append(";");
                 writer.append("PROCEDÊNCIA");
-                writer.append(",");
+                writer.append(";");
                 writer.append("QUANTIDADE");
                 writer.append("\n"); // Pula para a próxima linha
 
@@ -323,9 +323,9 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
                 for (Produto p : ps) {
                     // Escreve os dados de cada produto na ordem do cabeçalho
                     writer.append(p.getNome());
-                    writer.append(",");
+                    writer.append(";");
                     writer.append(p.getProcedencia());
-                    writer.append(",");
+                    writer.append(";");
                     writer.append(String.valueOf(p.getQuantidade()));
                     writer.append("\n");
                 }
