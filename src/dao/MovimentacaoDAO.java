@@ -19,7 +19,7 @@ public class MovimentacaoDAO {
         this.conn = new ConnectionFactory().getConnection();
     }
 
-    public void inserir(Movimentacao movimentacao) {
+    public void inserir(Movimentacao movimentacao) throws Exception {
         String sql = "INSERT INTO movimentacao (tipo, idProduto, data, hora, quantidade, usuario) VALUES (?, ?, date(now()), time(now()), ?, ?)";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -30,7 +30,12 @@ public class MovimentacaoDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
+            if (e.toString().contains("Unhandled")) {
+                
+                throw new Exception(e);
+            } else {
             JOptionPane.showMessageDialog(null, "Falha ao registrar movimentação: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            } 
         }
 
     }

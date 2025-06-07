@@ -207,23 +207,26 @@ public class CadastroMovimentacao extends javax.swing.JFrame {
             }
 
             ProdutoDAO produtoDAO = new ProdutoDAO();
-            produtoDAO.consultarID(idProduto);
+            
 
             Movimentacao movimentacao = new Movimentacao();
             movimentacao.setTipo(tipo);
             movimentacao.setQuantidade(Integer.parseInt(fieldQtde.getText()));
             movimentacao.setUsuarioResponsavel(Sessao.getEmail());
             movimentacao.setIdProduto(idProduto);
+            
             MovimentacaoDAO dao = new MovimentacaoDAO();
             dao.inserir(movimentacao);
-
-            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso");
+            
+            Produto p = produtoDAO.consultarID(idProduto);
+            
+            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso\n Agora temos "+p.getQuantidade()+" em estoque para "+p.getNome());
 
             btnLimparActionPerformed(evt);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro em inserir na base de dados: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+            JOptionPane.showMessageDialog(null, "Não existe essa quantidade em estoque para esse produto\n", "Erro", JOptionPane.ERROR_MESSAGE);
+        } 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed

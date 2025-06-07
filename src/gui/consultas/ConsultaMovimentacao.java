@@ -52,7 +52,6 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1000, 1000));
         setMinimumSize(new java.awt.Dimension(700, 700));
-        setPreferredSize(new java.awt.Dimension(985, 576));
 
         tabelaMov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -269,7 +268,7 @@ public class ConsultaMovimentacao extends javax.swing.JFrame {
             fieldBusca.setVisible(true);
             cbData.setVisible(false);
             LoadMovimentacoes();
-        }
+        } 
     }//GEN-LAST:event_cbTipoActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
